@@ -1,0 +1,49 @@
+#local actionHero files
+apps/*
+dist
+pids/*
+tmp/*
+locales/*
+log/*
+logstash-config/logstash.conf
+cache/*
+node_modules/*
+config/environments/user.js
+atlassian-ide-plugin.xml
+grunt/node_modules/*
+public/vendor/*
+public/plugin/*
+public/javascript/*
+
+# Node / NPM 
+npm-debug.*
+package-lock.json
+package-lock.json.*
+
+# OS-specific weirdness
+.DS_Store
+
+# Redis
+dump.rdb
+cache.dump
+
+# Editor-specific
+/nbproject/*
+/.idea/*
+
+.node-xmlhttprequest*
+
+public/javascript/actionheroClient.min.js
+
+public/javascript/actionheroClient.js
+
+selenium-debug.log
+test/nightwatch/reports
+
+.vscode/*
+docker/geth/data/
+docker/elasticsearch/esdata/
+docker/elasticsearch/data/
+
+.env.local
+ipfs-contractus

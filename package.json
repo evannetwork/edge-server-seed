@@ -1,0 +1,70 @@
+{
+  "license": "Apache-2.0",
+  "author": "evan.network",
+  "name": "@evan.network/edge-server-seed",
+  "description": "evan.network edge server",
+  "version": "0.9.1",
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "dependencies": {
+    "@evan.network/smart-contracts-core": "git@github.com:evannetwork/smart-contracts-core.git#develop",
+    "@evan.network/api-blockchain-core": "git@github.com:evannetwork/api-blockchain-core.git#develop",
+    "actionhero": "^18.1.0",
+    "env-cmd": "^7.0.0",
+    "fakeredis": "latest",
+    "ioredis": "latest",
+    "ipfs": "0.27.7",
+    "web3": "1.0.0-beta.22",
+    "web3-bzz": "1.0.0-beta.22",
+    "web3-core": "1.0.0-beta.22",
+    "web3-core-helpers": "1.0.0-beta.22",
+    "web3-core-method": "1.0.0-beta.22",
+    "web3-core-promievent": "1.0.0-beta.22",
+    "web3-core-requestmanager": "1.0.0-beta.22",
+    "web3-core-subscriptions": "1.0.0-beta.22",
+    "web3-eth": "1.0.0-beta.22",
+    "web3-eth-abi": "1.0.0-beta.22",
+    "web3-eth-accounts": "1.0.0-beta.22",
+    "web3-eth-contract": "1.0.0-beta.22",
+    "web3-eth-iban": "1.0.0-beta.22",
+    "web3-eth-personal": "1.0.0-beta.22",
+    "web3-net": "1.0.0-beta.22",
+    "web3-providers-http": "1.0.0-beta.22",
+    "web3-providers-ipc": "1.0.0-beta.22",
+    "web3-providers-ws": "1.0.0-beta.22",
+    "web3-shh": "1.0.0-beta.22",
+    "web3-utils": "1.0.0-beta.22",
+    "ws": "latest"
+  },
+  "devDependencies": {
+    "cross-env": "latest",
+    "chai": "latest",
+    "dirty-chai": "latest",
+    "mocha": "latest",
+    "standard": "latest"
+  },
+  "scripts": {
+    "start": "env-cmd ./.env.local node --preserve-symlinks ../../actionhero/bin/actionhero",
+    "debug": "env-cmd ./.env.local node --inspect --preserve-symlinks ../../actionhero/bin/actionhero",
+    "debugbrk": "env-cmd ./.env.local node --inspect-brk --preserve-symlinks ../../actionhero/bin/actionhero",
+    "actionhero": "env-cmd ./.env.local actionhero",
+    "pretest": "env-cmd ./.env.local standard",
+    "test": "env-cmd ./.env.local cross-env NODE_ENV=test mocha",
+    "postinstall": "cp ../smart-contracts-core/config/smart-contracts-core.js config/; mkdir -p node_modules/@evan.network; ln -sf ../../../smart-contracts-core node_modules/@evan.network/smart-contracts-core"
+  },
+  "standard": {
+    "ignore": [
+      "public/javascript/ActionheroWebsocketClient.*"
+    ],
+    "globals": [
+      "describe",
+      "before",
+      "beforeEach",
+      "after",
+      "afterEach",
+      "it",
+      "expect"
+    ]
+  }
+}
