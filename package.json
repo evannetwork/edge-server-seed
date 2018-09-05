@@ -3,13 +3,13 @@
   "author": "evan.network",
   "name": "@evan.network/edge-server-seed",
   "description": "evan.network edge server",
-  "version": "0.9.1",
+  "version": "1.0.0",
   "engines": {
     "node": ">=8.0.0"
   },
   "dependencies": {
-    "@evan.network/smart-contracts-core": "git@github.com:evannetwork/smart-contracts-core.git#develop",
-    "@evan.network/api-blockchain-core": "git@github.com:evannetwork/api-blockchain-core.git#develop",
+    "@evan.network/smart-contracts-core": "^1.0.3",
+    "@evan.network/api-blockchain-core": "^1.1.0",
     "actionhero": "^18.1.0",
     "env-cmd": "^7.0.0",
     "fakeredis": "latest",
