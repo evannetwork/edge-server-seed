@@ -30,7 +30,7 @@ class SmartAgent {
         api.eth.web3,
         api.dfs,
         {
-          accountMap: { [this.config.ethAccount]: api.config.encryptionKeys[this.config.ethAccount] },
+          accountMap: { [this.config.ethAccount]: api.config.ethAccounts[this.config.ethAccount] },
           nameResolver: api.config.eth.nameResolver,
           keys: api.config.encryptionKeys,
         }
