@@ -77,7 +77,7 @@ class SmartAgent {
                   dataContract: this.runtime.dataContract
                 });  
                 const publicKeyProfile = await profileForeign.getPublicKey()
-                const commSecret = this.runtime.computeSecretKey(publicKeyProfile)
+                const commSecret = this.runtime.keyExchange.computeSecretKey(publicKeyProfile)
                 const commKey = await this.runtime.keyExchange.decryptCommKey(
                   attachments[0].key,
                   commSecret.toString('hex')
