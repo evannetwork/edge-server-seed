@@ -61,14 +61,14 @@ class SmartAgent {
         async (event) => {
           const handleEvent = async () => {
             const {mailId} = event.returnValues
-            const bmail = await this.runtime.getMail(mailId)
+            const bmail = await this.runtime.mailbox.getMail(mailId)
             if (bmail.content && bmail.content.attachments && bmail.content.attachments.length) {
               const attachments = bmail.content.attachments
               const mailType = attachments[0].type
               if (mailType === 'commKey') {
                 // exchanging keys with smart agent
                 const profileForeign =  new Profile({
-                  ipld: this.runtime,
+                  ipld: this.runtime.ipld,
                   nameResolver: this.runtime.nameResolver,
                   defaultCryptoAlgo: 'aes',
                   executor: this.runtime.executor,
@@ -78,7 +78,7 @@ class SmartAgent {
                 });  
                 const publicKeyProfile = await profileForeign.getPublicKey()
                 const commSecret = this.runtime.computeSecretKey(publicKeyProfile)
-                const commKey = await this.runtime.decryptCommKey(
+                const commKey = await this.runtime.keyExchange.decryptCommKey(
                   attachments[0].key,
                   commSecret.toString('hex')
                 )
