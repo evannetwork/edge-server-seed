@@ -34,7 +34,7 @@
 
 'use strict'
 const {Initializer, api} = require('actionhero')
-const { Ipld, KeyExchange, KeyProvider, Mailbox, Profile } = require('@evan.network/api-blockchain-core')
+const { createDefaultRuntime, Profile, } = require('@evan.network/api-blockchain-core')
 
 
 class SmartAgent {
@@ -42,79 +42,19 @@ class SmartAgent {
     this.config = config
   }
   async initialize() {
-    this.keyProvider = new KeyProvider({keys: api.config.encryptionKeys})
-    this.keyProvider.log = api.log
-    if (!this.config.disableKeyExchange) {
-      this.ipld = new Ipld({
-        log: api.log,
-        ipfs: api.bcc.ipfs,
-        keyProvider: this.keyProvider,
-        cryptoProvider: api.bcc.cryptoProvider,
-        defaultCryptoAlgo: api.bcc.defaultCryptoAlgo,
-        originator: api.eth.web3.utils.soliditySha3(this.config.ethAccount),
-      })
-
-      // 'own' key provider, that won't be linked to profile and used in 'own' ipld
-      // this prevents key lookup infinite loops
-      const keyProviderOwn = new KeyProvider({keys: api.config.encryptionKeys})
-      keyProviderOwn.log = api.log
-      const ipldOwn = new Ipld({
-        log: api.log,
-        ipfs: api.bcc.ipfs,
-        keyProvider: keyProviderOwn,
-        cryptoProvider: api.bcc.cryptoProvider,
-        defaultCryptoAlgo: api.bcc.defaultCryptoAlgo,
-        originator: api.eth.web3.utils.soliditySha3(this.config.ethAccount),
-      })
-      this.profileOwn = new Profile({
-        ipld: ipldOwn,
-        nameResolver: api.bcc.nameResolver,
-        defaultCryptoAlgo: 'aes',
-        executor: api.bcc.executor,
-        contractLoader: api.bcc.contractLoader,
-        accountId: this.config.ethAccount,
-        dataContract: api.bcc.dataContract,
-      })
-  
-      if(!await this.profileOwn.exists()) {
-        const keyExchangeOptions = {
-          log: api.log,
-          mailbox: null,
-          cryptoProvider:  api.bcc.cryptoProvider,
-          defaultCryptoAlgo: api.bcc.defaultCryptoAlgo,   
-          account: this.config.ethAccount,
-          keyProvider: this.keyProvider,
-        };
-        const keyExchange = new KeyExchange(keyExchangeOptions);
-        await this.profileOwn.createProfile(keyExchange.getDiffieHellmanKeys());
+    // create runtime for agent, if ethAccount is configured
+    if (this.config.ethAccount) {
+      this.runtime = await createDefaultRuntime(
+        api.eth.web3,
+        api.dfs,
+        {
+          accountMap: { [this.config.ethAccount]: api.config.encryptionKeys[this.config.ethAccount] },
+          keys: api.config.encryptionKeys,
+        }
+      )
+      if (!this.config.ignoreKeyExchange) {
+        await this.listenToKeyExchangeMails()
       }
-      this.keyProvider.init(this.profileOwn)
-      this.keyProvider.currentAccount = this.config.ethAccount
-      this.mailbox = new Mailbox({
-        log: api.log,
-        mailboxOwner: this.config.ethAccount,
-        nameResolver: api.bcc.nameResolver,
-        ipfs: api.bcc.ipfs,
-        contractLoader: api.bcc.contractLoader,
-        cryptoProvider:  api.bcc.cryptoProvider,
-        keyProvider: this.keyProvider,
-        defaultCryptoAlgo: api.bcc.defaultCryptoAlgo,
-      })
-      const ownContactKey = await this.profileOwn.getContactKey(this.config.ethAccount, 'dataKey');
-      if (!ownContactKey) {
-        throw new Error(`missing data key for account ${this.config.ethAccount}`)
-      }
-      this.keyExchange = new KeyExchange({
-        log: api.log,
-        mailbox: this.mailbox,
-        cryptoProvider: api.bcc.cryptoProvider,
-        defaultCryptoAlgo: api.bcc.defaultCryptoAlgo,
-        account: this.config.ethAccount,
-        keyProvider: this.keyProvider,
-        privateKey: Buffer.from(ownContactKey, 'hex'),
-        publicKey: Buffer.from(await this.profileOwn.getPublicKey(), 'hex'),
-      })
-      await this.listenToKeyExchangeMails()
     }
   }
   async listenToKeyExchangeMails() {
@@ -122,7 +62,7 @@ class SmartAgent {
       let processingQueue = Promise.resolve()
       // get block from last uptime
       const lastBlock = (await api.redis.clients.client.get(`evannetwork:${this.config.name}:lastBlockOnboarding`)) || (await api.eth.web3.eth.getBlockNumber())
-      await api.bcc.eventHub.subscribe(
+      await this.runtime.eventHub.subscribe(
         'EventHub',
         null,
         'MailEvent',
@@ -130,37 +70,37 @@ class SmartAgent {
           // store block as uptime
           await api.redis.clients.client.set(`evannetwork:${this.config.name}:lastBlockOnboarding`, event.blockNumber)
           const {sender, recipient} = event.returnValues
-          const mailboxDomain = api.bcc.nameResolver.getDomainName(api.config.eth.nameResolver.domains.mailbox)
-          const mailboxAddress = await api.bcc.nameResolver.getAddress(mailboxDomain)
+          const mailboxDomain = this.runtime.nameResolver.getDomainName(api.config.eth.nameResolver.domains.mailbox)
+          const mailboxAddress = await this.runtime.nameResolver.getAddress(mailboxDomain)
           // only handle mailbox events of registered mailbox, only handle mails to smart agent
           return mailboxAddress === sender && this.config.ethAccount === recipient
         },
         async (event) => {
           const handleEvent = async () => {
             const {mailId} = event.returnValues
-            const bmail = await this.mailbox.getMail(mailId)
+            const bmail = await this.runtime.getMail(mailId)
             if (bmail.content && bmail.content.attachments && bmail.content.attachments.length) {
               const attachments = bmail.content.attachments
               const mailType = attachments[0].type
               if (mailType === 'commKey') {
                 // exchanging keys with smart agent
                 const profileForeign =  new Profile({
-                  ipld: this.ipld,
-                  nameResolver: api.bcc.nameResolver,
+                  ipld: this.runtime,
+                  nameResolver: this.runtime.nameResolver,
                   defaultCryptoAlgo: 'aes',
-                  executor: api.bcc.executor,
-                  contractLoader: api.bcc.contractLoader,
+                  executor: this.runtime.executor,
+                  contractLoader: this.runtime.contractLoader,
                   accountId: bmail.content.from,
-                  dataContract: api.bcc.dataContract
+                  dataContract: this.runtime.dataContract
                 });  
                 const publicKeyProfile = await profileForeign.getPublicKey()
-                const commSecret = this.keyExchange.computeSecretKey(publicKeyProfile)
-                const commKey = await this.keyExchange.decryptCommKey(
+                const commSecret = this.runtime.computeSecretKey(publicKeyProfile)
+                const commKey = await this.runtime.decryptCommKey(
                   attachments[0].key,
                   commSecret.toString('hex')
                 )
-                await this.profileOwn.addContactKey(bmail.content.from, 'commKey', commKey.toString('utf-8'))
-                await this.profileOwn.storeForAccount('addressBook')
+                await this.runtime.profile.addContactKey(bmail.content.from, 'commKey', commKey.toString('utf-8'))
+                await this.runtime.profile.storeForAccount('addressBook')
               }
             }
           }

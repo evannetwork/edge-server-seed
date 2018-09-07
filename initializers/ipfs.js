@@ -37,6 +37,7 @@ const {Initializer, api} = require('actionhero')
 const IpfsServer = require('ipfs')
 const IpfsRemoteServer = require('ipfs-api')
 const {promisify} = require('util')
+const sharedLib = require('@evan.network/api-blockchain-core')
 
 
 module.exports = class Ipfs extends Initializer {
@@ -62,6 +63,7 @@ module.exports = class Ipfs extends Initializer {
               protocol: this.config.remoteNode.protocol,
             })
             api.ipfs = { node, remoteNode }
+            api.dfs = new sharedLib.Ipfs({ node, remoteNode, log: api.log, })
             resolve()
           }, 5000)
         } catch (ex) {
