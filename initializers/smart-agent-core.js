@@ -32,7 +32,7 @@ class SmartAgent {
         {
           accountMap: { [this.config.ethAccount]: api.config.ethAccounts[this.config.ethAccount] },
           nameResolver: api.config.eth.nameResolver,
-          keys: api.config.encryptionKeys,
+          keyConfig: api.config.encryptionKeys,
         }
       )
       if (!this.config.ignoreKeyExchange) {
