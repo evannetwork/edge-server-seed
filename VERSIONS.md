@@ -1,6 +1,13 @@
 # edge-server-seed
 
 ## Next Version
+### Features
+- use `createDefaultRuntime` for `api-blockchain-core` connection
+- replace `api.bcc` references with usages of own `this.runtime`
+
+### Fixes
+### Deprecations
+
 
 ## Version 1.0.0
 - isolated all sensitive internal configuration data into the old edge-server repo
