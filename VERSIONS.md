@@ -2,6 +2,8 @@
 
 ## Next Version
 ### Features
+- add support for custom business center labels in `SmartAgent` (can be set by providing property `bcDomain` in agent config)
+
 ### Fixes
 ### Deprecations
 

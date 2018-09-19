@@ -21,17 +21,23 @@ const { createDefaultRuntime, Profile, } = require('@evan.network/api-blockchain
 
 class SmartAgent {
   constructor(config) {
-    this.config = config
+    this.config = JSON.parse(JSON.stringify(config))
   }
   async initialize() {
     // create runtime for agent, if ethAccount is configured
     if (this.config.ethAccount) {
+      let nameResolverConfig = api.config.eth.nameResolver;
+      if (this.config.bcDomain) {
+        // overwrite business center domain label if set in agents own config
+        nameResolverConfig = JSON.parse(JSON.stringify(nameResolverConfig))
+        nameResolverConfig.labels.businessCenterRoot = this.config.bcDomain
+      }
       this.runtime = await createDefaultRuntime(
         api.eth.web3,
         api.dfs,
         {
           accountMap: { [this.config.ethAccount]: api.config.ethAccounts[this.config.ethAccount] },
-          nameResolver: api.config.eth.nameResolver,
+          nameResolver: nameResolverConfig,
           keyConfig: api.config.encryptionKeys,
         }
       )
