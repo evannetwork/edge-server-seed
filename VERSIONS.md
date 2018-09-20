@@ -6,6 +6,13 @@
 ### Deprecations
 
 
+## Version 1.0.1
+### Features
+- add support for custom business center labels in `SmartAgent` (can be set by providing property `bcDomain` in agent config)
+
+### Fixes
+### Deprecations
+
 ## Version 1.0.0
 ### Features
 - use `createDefaultRuntime` for `api-blockchain-core` connection
