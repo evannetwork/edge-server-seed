@@ -3,6 +3,7 @@
 ## Next Version
 ### Features
 - make websocket reconnect available for other modules
+- add support for passing custom web3 instances to agents runtime
 
 ### Fixes
 ### Deprecations

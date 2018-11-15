@@ -23,7 +23,8 @@ class SmartAgent {
   constructor(config) {
     this.config = JSON.parse(JSON.stringify(config))
   }
-  async initialize() {
+
+  async initialize({ web3 } = {}) {
     // create runtime for agent, if ethAccount is configured
     if (this.config.ethAccount) {
       let nameResolverConfig = api.config.eth.nameResolver;
@@ -33,7 +34,7 @@ class SmartAgent {
         nameResolverConfig.labels.businessCenterRoot = this.config.bcDomain
       }
       this.runtime = await createDefaultRuntime(
-        api.eth.web3,
+        web3 || api.eth.web3,
         api.dfs,
         {
           accountMap: { [this.config.ethAccount]: api.config.ethAccounts[this.config.ethAccount] },
@@ -46,6 +47,7 @@ class SmartAgent {
       }
     }
   }
+
   async listenToKeyExchangeMails() {
     try {
       let processingQueue = Promise.resolve()
