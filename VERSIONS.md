@@ -2,6 +2,8 @@
 
 ## Next Version
 ### Features
+- make websocket reconnect available for other modules
+
 ### Fixes
 ### Deprecations
 

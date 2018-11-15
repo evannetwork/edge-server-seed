@@ -35,13 +35,76 @@ module.exports = class Eth extends Initializer {
     this.blockEmitter = new EventEmitter();
   }
 
-  async initialize () {
+  /**
+   * add reconnect to websocker provider and use it as web3 provider
+   *
+   * @param      {object}  Web3         Web3 module
+   * @param      {object}  web3         web3 instance (without provider)
+   * @param      {string}  providerUrl  websocker provider url
+   */
+  addWebsocketReconnect(Web3, web3, providerUrl) {
+    let websocketProvider;
+    let reconnecting;
+
+    /**
+     * Reconnect the current websocket connection
+     *
+     * @param      {url}       url       url to connect to the websocket
+     * @param      {Function}  callback  optional callback that is called when the
+     *                                   reconnect is done
+     */
+    let reconnect = (url, callback) => {
+      if (!reconnecting) {
+        api.log('Lost connection to Websocket, reconnecting in 1000ms');
+
+        reconnecting = [ ];
+
+        setTimeout(() => {
+          // stop last provider
+          websocketProvider._timeout();
+          websocketProvider.reset();
+          websocketProvider.removeAllListeners();
+
+          // create new provider
+          websocketProvider = new web3.providers.WebsocketProvider(url);
+          websocketProvider.on('end', () => reconnect(url));
+
+          // remove the old provider from requestManager to prevent errors on reconnect
+          delete web3._requestManager.provider;
+          web3.setProvider(websocketProvider);
+          websocketProvider.on('connect', () => {
+            // check if any existing eventHub listeners are open
+            for(let contract in api.bcc.eventHub.eventEmitter) {
+              for(let subscription in api.bcc.eventHub.eventEmitter[contract]) {
+                if(api.bcc.eventHub.eventEmitter[contract][subscription]) {
+                  api.bcc.eventHub.eventEmitter[contract][subscription].options.requestManager = api.eth.web3._requestManager;
+                  delete api.bcc.eventHub.eventEmitter[contract][subscription].id;
+                  api.bcc.eventHub.eventEmitter[contract][subscription].subscribe();
+                }
+              }
+            }
+          });
+          // run reconnecting callbacks
+          for (let i = 0; i < reconnecting.length; i++) {
+            reconnecting[i]();
+          }
+
+          reconnecting = undefined;
+        }, 1000);
+      }
+
+      // add callback to the reconnecting array to call them after reconnect
+      if (typeof callback === 'function') {
+        reconnecting.push(callback);
+      }
+    }
+
     // connect to web3
     Web3.providers.WebsocketProvider.prototype.send = (payload, callback) => {
       let _this = this;
 
       // if the connection is already connecting, wait 100ms and try again
-      if (this.websocketProvider.connection.readyState === this.websocketProvider.connection.CONNECTING) {
+      if (websocketProvider.connection.readyState === websocketProvider.connection.CONNECTING) {
         setTimeout(function () {
           _this.send(payload, callback);
         }, 100);
@@ -49,8 +112,8 @@ module.exports = class Eth extends Initializer {
       }
 
       // if the connection is lost, try to reconnect to the url
-      if (this.websocketProvider.connection.readyState !== this.websocketProvider.connection.OPEN) {
-        this.reconnect(this.websocketProvider.connection.url, () => {
+      if (websocketProvider.connection.readyState !== websocketProvider.connection.OPEN) {
+        reconnect(websocketProvider.connection.url, () => {
           _this.send(payload, callback);
         });
 
@@ -58,79 +121,31 @@ module.exports = class Eth extends Initializer {
       }
 
       // send the request
-      this.websocketProvider.connection.send(JSON.stringify(payload));
-      this.websocketProvider._addResponseCallback(payload, callback);
+      websocketProvider.connection.send(JSON.stringify(payload));
+      websocketProvider._addResponseCallback(payload, callback);
     };
 
     // check if an websockerProvider exists and if the url has changed => reset old one
-    if (this.websocketProvider && this.websocketProvider.connection.url !== api.config.eth.provider.url) {
-      this.websocketProvider.reset();
+    if (websocketProvider && websocketProvider.connection.url !== providerUrl) {
+      websocketProvider.reset();
     }
 
     // create a new websocket connection, when its the first or the url has changed
-    if (!this.websocketProvider || this.websocketProvider.connection.url !== api.config.eth.provider.url) {
-      this.websocketProvider = new this.web3.providers.WebsocketProvider(api.config.eth.provider.url);
-      this.websocketProvider.on('end', () => this.reconnect(api.config.eth.provider.url));
+    if (!websocketProvider || websocketProvider.connection.url !== providerUrl) {
+      websocketProvider = new web3.providers.WebsocketProvider(providerUrl);
+      websocketProvider.on('end', () => reconnect(providerUrl));
 
-      this.web3.setProvider(this.websocketProvider);
-    }
-
-    api['eth'] = {
-      web3 : this.web3,
-      blockEmitter: this.blockEmitter
+      web3.setProvider(websocketProvider);
     }
   }
 
-  /**
-   * Reconnect the current websocket connection
-   *
-   * @param      {url}       url       url to connect to the websocket
-   * @param      {Function}  callback  optional callback that is called when the
-   *                                   reconnect is done
-   */
-  reconnect(url, callback) {
-    if (!this.reconnecting) {
-      api.log('Lost connection to Websocket, reconnecting in 1000ms');
+  async initialize () {
+    this.addWebsocketReconnect(Web3, this.web3, api.config.eth.provider.url)
 
-      this.reconnecting = [ ];
-
-      setTimeout(() => {
-        // stop last provider
-        this.websocketProvider._timeout();
-        this.websocketProvider.reset();
-        this.websocketProvider.removeAllListeners();
-
-        // create new provider
-        this.websocketProvider = new this.web3.providers.WebsocketProvider(url);
-        this.websocketProvider.on('end', () => this.reconnect(url));
-
-        // remove the old provider from requestManager to prevent errors on reconnect
-        delete this.web3._requestManager.provider;
-        this.web3.setProvider(this.websocketProvider);
-        this.websocketProvider.on('connect', () => {
-          // check if any existing eventHub listeners are open
-          for(let contract in api.bcc.eventHub.eventEmitter) {
-            for(let subscription in api.bcc.eventHub.eventEmitter[contract]) {
-              if(api.bcc.eventHub.eventEmitter[contract][subscription]) {
-                api.bcc.eventHub.eventEmitter[contract][subscription].options.requestManager = api.eth.web3._requestManager;
-                delete api.bcc.eventHub.eventEmitter[contract][subscription].id;
-                api.bcc.eventHub.eventEmitter[contract][subscription].subscribe();
-              }
-            }
-          }
-        });
-        // run reconnecting callbacks
-        for (let i = 0; i < this.reconnecting.length; i++) {
-          this.reconnecting[i]();
-        }
-
-        this.reconnecting = undefined;
-      }, 1000);
-    }
-
-    // add callback to the reconnecting array to call them after reconnect
-    if (typeof callback === 'function') {
-      this.reconnecting.push(callback);
+    api['eth'] = {
+      addWebsocketReconnect: this.addWebsocketReconnect,
+      blockEmitter: this.blockEmitter,
+      web3 : this.web3,
     }
   }
 
