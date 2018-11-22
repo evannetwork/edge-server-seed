@@ -51,7 +51,7 @@
     "actionhero": "env-cmd ./.env.local actionhero",
     "pretest": "env-cmd ./.env.local standard",
     "test": "env-cmd ./.env.local cross-env NODE_ENV=test mocha",
-    "postinstall": "cp ../smart-contracts-core/config/smart-contracts-core.js config/ && mkdirp -p node_modules/@evan.network && ln -sf ../../../smart-contracts-core node_modules/@evan.network/smart-contracts-core"
+    "postinstall": "cp ../smart-contracts-core/config/smart-contracts-core.js config/ && mkdirp node_modules/@evan.network && ln -sf ../../../smart-contracts-core node_modules/@evan.network/smart-contracts-core"
   },
   "standard": {
     "ignore": [
