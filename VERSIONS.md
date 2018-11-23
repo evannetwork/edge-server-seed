@@ -2,14 +2,16 @@
 
 ## Next Version
 ### Features
+### Fixes
+### Deprecations
+
+## Version 1.1.0
+### Features
 - make websocket reconnect available for other modules
 - add support for passing custom web3 instances to agents runtime
 
 ### Fixes
 - fix startup scripts
-
-### Deprecations
-
 
 ## Version 1.0.1
 ### Features
