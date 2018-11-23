@@ -6,6 +6,8 @@
 - add support for passing custom web3 instances to agents runtime
 
 ### Fixes
+- fix startup scripts
+
 ### Deprecations
 
 
