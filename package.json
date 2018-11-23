@@ -1,15 +1,15 @@
 {
   "license": "Apache-2.0",
-  "author": "evan.network",
+  "author": "evan GmbH",
   "name": "@evan.network/edge-server-seed",
   "description": "evan.network edge server",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "engines": {
     "node": ">=8.0.0"
   },
   "dependencies": {
-    "@evan.network/smart-contracts-core": "^1.0.3",
-    "@evan.network/api-blockchain-core": "^1.1.0",
+    "@evan.network/smart-contracts-core": "^1.2.0",
+    "@evan.network/api-blockchain-core": "^1.4.0",
     "actionhero": "^18.1.0",
     "env-cmd": "^7.0.0",
     "fakeredis": "latest",
@@ -51,7 +51,7 @@
     "actionhero": "env-cmd ./.env.local actionhero",
     "pretest": "env-cmd ./.env.local standard",
     "test": "env-cmd ./.env.local cross-env NODE_ENV=test mocha",
-    "postinstall": "cp ../smart-contracts-core/config/smart-contracts-core.js config/; mkdir -p node_modules/@evan.network; ln -sf ../../../smart-contracts-core node_modules/@evan.network/smart-contracts-core"
+    "postinstall": "cp ../smart-contracts-core/config/smart-contracts-core.js config/ && mkdirp node_modules/@evan.network && ln -sf ../../../smart-contracts-core node_modules/@evan.network/smart-contracts-core"
   },
   "standard": {
     "ignore": [
