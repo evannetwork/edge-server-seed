@@ -16,7 +16,7 @@
 
 'use strict'
 const {Initializer, api} = require('actionhero')
-const { createDefaultRuntime, Profile, } = require('@evan.network/api-blockchain-core')
+const { createDefaultRuntime, Profile, Ipfs } = require('@evan.network/api-blockchain-core')
 
 
 class SmartAgent {
@@ -33,6 +33,20 @@ class SmartAgent {
         nameResolverConfig = JSON.parse(JSON.stringify(nameResolverConfig))
         nameResolverConfig.labels.businessCenterRoot = this.config.bcDomain
       }
+
+      // setup the bcc IPFS connection with account informations
+      api.dfs = new Ipfs({ 
+        log: api.log,
+        dfsConfig: {
+          host: api.config.ipfs.config.remoteNode.host,
+          port: api.config.ipfs.config.remoteNode.port,
+          protocol: api.config.ipfs.config.remoteNode.protocol,
+        },
+        web3: web3 || api.eth.web3,
+        accountId: this.config.ethAccount,
+        privateKey: api.config.ethAccounts[this.config.ethAccount]
+      })
+
       this.runtime = await createDefaultRuntime(
         web3 || api.eth.web3,
         api.dfs,
