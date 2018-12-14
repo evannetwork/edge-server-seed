@@ -1,7 +1,7 @@
 {
   "author": "evan GmbH",
   "dependencies": {
-    "@evan.network/api-blockchain-core": "^1.6.0",
+    "@evan.network/api-blockchain-core": "^1.6.1",
     "@evan.network/smart-contracts-core": "^1.4.0",
     "actionhero": "^18.1.0",
     "env-cmd": "^7.0.0",
