@@ -3,8 +3,10 @@
 ## Next Version
 ### Features
 - adjust IPFs to use authorization when ethAccount is set,
+
 ### Fixes
 - remove obsolete IPFS Server startup
+
 ### Deprecations
 
 ## Version 1.1.0
