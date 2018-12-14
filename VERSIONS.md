@@ -5,6 +5,13 @@
 ### Fixes
 ### Deprecations
 
+## Version 1.2.0
+### Features
+- adjust IPFs to use authorization when ethAccount is set,
+
+### Fixes
+- remove obsolete IPFS Server startup
+
 ## Version 1.1.0
 ### Features
 - make websocket reconnect available for other modules
