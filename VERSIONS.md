@@ -5,6 +5,11 @@
 ### Fixes
 ### Deprecations
 
+## Version 1.3.0
+### Fixes
+- NodeJS 10 compatibility
+- websocket reconnect to blockchain fixed
+
 ## Version 1.2.0
 ### Features
 - adjust IPFs to use authorization when ethAccount is set,

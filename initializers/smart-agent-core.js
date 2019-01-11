@@ -1,12 +1,12 @@
 /*
   Copyright (c) 2018-present evan GmbH.
- 
+
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
   You may obtain a copy of the License at
- 
+
       http://www.apache.org/licenses/LICENSE-2.0
- 
+
   Unless required by applicable law or agreed to in writing, software
   distributed under the License is distributed on an "AS IS" BASIS,
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -35,12 +35,12 @@ class SmartAgent {
       }
 
       // setup the bcc IPFS connection with account informations
-      api.dfs = new Ipfs({ 
+      api.dfs = new Ipfs({
         log: api.log,
         dfsConfig: {
-          host: api.config.ipfs.config.remoteNode.host,
-          port: api.config.ipfs.config.remoteNode.port,
-          protocol: api.config.ipfs.config.remoteNode.protocol,
+          host: api.config.ipfs.remoteNode.host,
+          port: api.config.ipfs.remoteNode.port,
+          protocol: api.config.ipfs.remoteNode.protocol,
         },
         web3: web3 || api.eth.web3,
         accountId: this.config.ethAccount,
@@ -97,7 +97,7 @@ class SmartAgent {
                   contractLoader: this.runtime.contractLoader,
                   accountId: bmail.content.from,
                   dataContract: this.runtime.dataContract
-                });  
+                });
                 const publicKeyProfile = await profileForeign.getPublicKey()
                 const commSecret = this.runtime.keyExchange.computeSecretKey(publicKeyProfile)
                 const commKey = await this.runtime.keyExchange.decryptCommKey(
