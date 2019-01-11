@@ -3,10 +3,12 @@
 ## Next Version
 ### Features
 ### Fixes
+### Deprecations
+
+## Version 1.3.0
+### Fixes
 - NodeJS 10 compatibility
 - websocket reconnect to blockchain fixed
-
-### Deprecations
 
 ## Version 1.2.0
 ### Features
