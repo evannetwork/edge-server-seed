@@ -3,6 +3,10 @@
 ## Next Version
 ### Features
 ### Fixes
+- run `mkdirp` with `npx`
+- rename `evanRoot` label to `ensRoot` label
+- add log message, when key exchange are being accepted
+
 ### Deprecations
 
 ## Version 1.3.0
