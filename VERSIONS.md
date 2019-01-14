@@ -5,6 +5,12 @@
 ### Fixes
 ### Deprecations
 
+## Version 1.3.1
+### Fixes
+- run `mkdirp` with `npx`
+- rename `evanRoot` label to `ensRoot` label
+- add log message, when key exchange are being accepted
+
 ## Version 1.3.0
 ### Fixes
 - NodeJS 10 compatibility
