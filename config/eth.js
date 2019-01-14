@@ -49,7 +49,7 @@ exports['default'] = {
         ensResolver: process.env.ENS_RESOLVER || '0xDC18774FA2E472D26aB91deCC4CDd20D9E82047e',
         labels: {
           businessCenterRoot: process.env.BC_ROOT || 'testbc.evan',
-          evanRoot: process.env.ENS_ROOT || 'evan',
+          ensRoot: process.env.ENS_ROOT || 'evan',
           factory: 'factory',
           admin: 'admin',
           eventhub: 'eventhub',
@@ -58,14 +58,14 @@ exports['default'] = {
           wallet: 'wallet',
         },
         domains: {
-          root: ['evanRoot'],
+          root: ['ensRoot'],
           factory: ['factory', 'businessCenterRoot'],
-          adminFactory: ['admin', 'factory', 'evanRoot'],
+          adminFactory: ['admin', 'factory', 'ensRoot'],
           businessCenter: ['businessCenterRoot'],
-          eventhub: process.env.ENS_EVENTS || ['eventhub', 'evanRoot'],
-          profile: process.env.ENS_PROFILES || ['profile', 'evanRoot'],
-          profileFactory: ['profile', 'factory', 'evanRoot'],
-          mailbox: process.env.ENS_MAILBOX || ['mailbox', 'evanRoot'],
+          eventhub: process.env.ENS_EVENTS || ['eventhub', 'ensRoot'],
+          profile: process.env.ENS_PROFILES || ['profile', 'ensRoot'],
+          profileFactory: ['profile', 'factory', 'ensRoot'],
+          mailbox: process.env.ENS_MAILBOX || ['mailbox', 'ensRoot'],
         },
       }
     }
