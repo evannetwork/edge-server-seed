@@ -34,7 +34,7 @@ exports['default'] = {
     return {
       provider: {
         // parity/geth endpoint
-        url: process.env.ETH_WS_ADDRESS || 'ws://localhost:8546',
+        url: process.env.ETH_WS_ADDRESS || 'wss://testcore.evan.network/ws',
       },
       signer: {
         // gas price to pay in wei
