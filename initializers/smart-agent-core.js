@@ -100,6 +100,7 @@ class SmartAgent {
               const attachments = bmail.content.attachments
               const mailType = attachments[0].type
               if (mailType === 'commKey') {
+                api.log(`received key exchange mail from "${bmail.content.from}", accepting invitation`)
                 // exchanging keys with smart agent
                 const profileForeign =  new Profile({
                   ipld: this.runtime.ipld,

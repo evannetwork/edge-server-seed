@@ -3,9 +3,27 @@
 ## Next Version
 ### Features
 ### Fixes
+### Deprecations
+
+
+## Version 1.3.2
+### Fixes
+- add REDIS_DISABLED env variable to disable redis
+- set default rpc endpoint to remote
+
+
+## Version 1.3.1
+### Fixes
+- run `mkdirp` with `npx`
+- rename `evanRoot` label to `ensRoot` label
+- add log message, when key exchange are being accepted
+
+
+## Version 1.3.0
+### Fixes
 - NodeJS 10 compatibility
 - websocket reconnect to blockchain fixed
-### Deprecations
+
 
 ## Version 1.2.0
 ### Features
@@ -13,6 +31,7 @@
 
 ### Fixes
 - remove obsolete IPFS Server startup
+
 
 ## Version 1.1.0
 ### Features
@@ -22,12 +41,14 @@
 ### Fixes
 - fix startup scripts
 
+
 ## Version 1.0.1
 ### Features
 - add support for custom business center labels in `SmartAgent` (can be set by providing property `bcDomain` in agent config)
 
 ### Fixes
 ### Deprecations
+
 
 ## Version 1.0.0
 ### Features

@@ -42,7 +42,7 @@ exports['default'] = {
     }
 
     return {
-      enabled: true,
+      enabled: !process.env.REDIS_DISABLED,
 
       '_toExpand': false,
       client: {
