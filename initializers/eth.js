@@ -72,18 +72,6 @@ module.exports = class Eth extends Initializer {
           // remove the old provider from requestManager to prevent errors on reconnect
           delete web3._requestManager.provider;
           web3.setProvider(websocketProvider);
-          websocketProvider.on('connect', () => {
-            // check if any existing eventHub listeners are open
-            for(let contract in api.bcc.eventHub.eventEmitter) {
-              for(let subscription in api.bcc.eventHub.eventEmitter[contract]) {
-                if(api.bcc.eventHub.eventEmitter[contract][subscription]) {
-                  api.bcc.eventHub.eventEmitter[contract][subscription].options.requestManager = api.eth.web3._requestManager;
-                  delete api.bcc.eventHub.eventEmitter[contract][subscription].id;
-                  api.bcc.eventHub.eventEmitter[contract][subscription].subscribe();
-                }
-              }
-            }
-          });
           // run reconnecting callbacks
           for (let i = 0; i < reconnecting.length; i++) {
             reconnecting[i]();
