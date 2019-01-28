@@ -44,7 +44,7 @@ class SmartAgent {
         },
         web3: web3 || api.eth.web3,
         accountId: this.config.ethAccount,
-        privateKey: api.config.ethAccounts[this.config.ethAccount]
+        privateKey: '0x' + api.config.ethAccounts[this.config.ethAccount]
       })
 
       this.runtime = await createDefaultRuntime(
