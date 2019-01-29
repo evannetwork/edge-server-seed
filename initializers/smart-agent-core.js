@@ -56,18 +56,6 @@ class SmartAgent {
           keyConfig: api.config.encryptionKeys,
         }
       )
-      this.runtime.web3._provider.on('connect', () => {
-        // check if any existing eventHub listeners are open
-        for(let contract in this.runtime.eventHub.eventEmitter) {
-          for(let subscription in this.runtime.eventHub.eventEmitter[contract]) {
-            if(this.runtime.eventHub.eventEmitter[contract][subscription]) {
-              this.runtime.eventHub.eventEmitter[contract][subscription].options.requestManager = this.runtime.web3._requestManager;
-              delete this.runtime.eventHub.eventEmitter[contract][subscription].id;
-              this.runtime.eventHub.eventEmitter[contract][subscription].subscribe();
-            }
-          }
-        }
-      });
       if (!this.config.ignoreKeyExchange) {
         await this.listenToKeyExchangeMails()
       }
