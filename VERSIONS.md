@@ -6,6 +6,16 @@
 ### Deprecations
 
 
+## Version 1.4.0
+### Features
+- add 0x pk prefix for ipfs signing messages
+
+### Fixes
+- adjust reconnecting issues with keepalive ping
+
+### Deprecations
+- move reconnect to smart agent core
+
 ## Version 1.3.2
 ### Fixes
 - add REDIS_DISABLED env variable to disable redis
