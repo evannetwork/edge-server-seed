@@ -2,6 +2,12 @@
 
 ## Next Version
 ### Features
+### Fixes
+### Deprecations
+
+
+## Version 1.4.0
+### Features
 - add 0x pk prefix for ipfs signing messages
 
 ### Fixes
@@ -9,7 +15,6 @@
 
 ### Deprecations
 - move reconnect to smart agent core
-
 
 ## Version 1.3.2
 ### Fixes
