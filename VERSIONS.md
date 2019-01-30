@@ -2,8 +2,13 @@
 
 ## Next Version
 ### Features
+- add 0x pk prefix for ipfs signing messages
+
 ### Fixes
+- adjust reconnecting issues with keepalive ping
+
 ### Deprecations
+- move reconnect to smart agent core
 
 
 ## Version 1.3.2
