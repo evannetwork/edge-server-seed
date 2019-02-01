@@ -140,7 +140,7 @@ module.exports = class SmartAgentCore extends Initializer {
 
     api.smartAgents = {
       SmartAgent,
-      registeredAgents = []
+      registeredAgents: []
     }
   }
 
