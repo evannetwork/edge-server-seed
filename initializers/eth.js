@@ -141,7 +141,7 @@ module.exports = class Eth extends Initializer {
 
     // create a new websocket connection, when its the first or the url has changed
     if (!websocketProvider || websocketProvider.connection.url !== providerUrl) {
-      const websocketProvider = new Web3.providers.WebsocketProvider(
+      websocketProvider = new Web3.providers.WebsocketProvider(
         providerUrl,
         {
           clientConfig: {
