@@ -3,6 +3,7 @@
 ## Next Version
 ### Features
 ### Fixes
+- enable real reconnect with ping and event listening
 ### Deprecations
 
 
