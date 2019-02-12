@@ -59,6 +59,7 @@ class SmartAgent {
       if (!this.config.ignoreKeyExchange) {
         await this.listenToKeyExchangeMails()
       }
+      api.smartAgents.registeredAgents.push(this)
     }
   }
 
@@ -139,6 +140,7 @@ module.exports = class SmartAgentCore extends Initializer {
 
     api.smartAgents = {
       SmartAgent,
+      registeredAgents: []
     }
   }
 

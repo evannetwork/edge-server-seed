@@ -6,6 +6,11 @@
 ### Deprecations
 
 
+## Version 1.4.1
+### Fixes
+- enable real reconnect with ping and event listening
+
+
 ## Version 1.4.0
 ### Features
 - add 0x pk prefix for ipfs signing messages
