@@ -3,8 +3,12 @@
 ## Next Version
 ### Features
 ### Fixes
-- enable real reconnect with ping and event listening
 ### Deprecations
+
+
+## Version 1.4.1
+### Fixes
+- enable real reconnect with ping and event listening
 
 
 ## Version 1.4.0
