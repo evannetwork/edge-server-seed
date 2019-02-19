@@ -18,7 +18,7 @@
   ipfs: (api) => {
     return {
       remoteNode: {
-        host: 'ipfs.evan.network',
+        host: 'ipfs.test.evan.network',
         port: '443',
         protocol: 'https',
       }
