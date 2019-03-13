@@ -2,6 +2,8 @@
 
 ## Next Version
 ### Features
+- add initializer that merges smart agent configs
+
 ### Fixes
 ### Deprecations
 
