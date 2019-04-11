@@ -6,6 +6,14 @@
 ### Deprecations
 
 
+## Version 1.5.0
+### Features
+- add initializer that merges smart agent configs
+- add payment channel support for smart agents
+- add missing CORS handler
+### Fixes
+- Fix test IPFS endpoint
+
 ## Version 1.4.1
 ### Fixes
 - enable real reconnect with ping and event listening
