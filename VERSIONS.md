@@ -2,11 +2,17 @@
 
 ## Next Version
 ### Features
-- add initializer that merges smart agent configs
-
 ### Fixes
 ### Deprecations
 
+
+## Version 1.5.0
+### Features
+- add initializer that merges smart agent configs
+- add payment channel support for smart agents
+- add missing CORS handler
+### Fixes
+- Fix test IPFS endpoint
 
 ## Version 1.4.1
 ### Fixes
