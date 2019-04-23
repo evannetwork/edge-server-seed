@@ -55,6 +55,16 @@ class SmartAgent {
           port: api.config.ipfs.remoteNode.port,
           protocol: api.config.ipfs.remoteNode.protocol
         },
+        web3: web3 || api.eth.web3
+      })
+
+      this.dfs = new Ipfs({
+        log: api.log,
+        dfsConfig: {
+          host: api.config.ipfs.remoteNode.host,
+          port: api.config.ipfs.remoteNode.port,
+          protocol: api.config.ipfs.remoteNode.protocol
+        },
         web3: web3 || api.eth.web3,
         accountId: this.config.ethAccount,
         privateKey: '0x' + api.config.ethAccounts[this.config.ethAccount]
@@ -62,7 +72,7 @@ class SmartAgent {
 
       this.runtime = await createDefaultRuntime(
         web3 || api.eth.web3,
-        api.dfs,
+        this.dfs,
         {
           accountMap: { [this.config.ethAccount]: api.config.ethAccounts[this.config.ethAccount] },
           nameResolver: nameResolverConfig,
