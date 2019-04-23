@@ -3,6 +3,7 @@
 ## Next Version
 ### Features
 ### Fixes
+- add default en locales
 ### Deprecations
 
 

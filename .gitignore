@@ -3,7 +3,6 @@ apps/*
 dist
 pids/*
 tmp/*
-locales/*
 log/*
 logstash-config/logstash.conf
 cache/*
