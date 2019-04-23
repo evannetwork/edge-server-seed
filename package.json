@@ -3,7 +3,7 @@
   "dependencies": {
     "@evan.network/api-blockchain-core": "^2.0.0",
     "@evan.network/smart-contracts-core": "^2.0.0",
-    "actionhero": "^18.1.0",
+    "actionhero": "^19.1.0",
     "env-cmd": "^7.0.0",
     "fakeredis": "latest",
     "ioredis": "latest",

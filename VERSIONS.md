@@ -4,6 +4,7 @@
 ### Features
 ### Fixes
 - add default en locales
+- add dfs instance for each smart agent account
 ### Deprecations
 
 
