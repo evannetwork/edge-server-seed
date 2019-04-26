@@ -3,9 +3,16 @@
 ## Next Version
 ### Features
 ### Fixes
+### Deprecations
+
+
+## Version 1.6.0
+### Features
+- increase actionhero version
+
+### Fixes
 - add default en locales
 - add dfs instance for each smart agent account
-### Deprecations
 
 
 ## Version 1.5.0
@@ -13,6 +20,7 @@
 - add initializer that merges smart agent configs
 - add payment channel support for smart agents
 - add missing CORS handler
+
 ### Fixes
 - Fix test IPFS endpoint
 
@@ -71,9 +79,6 @@
 ### Features
 - add support for custom business center labels in `SmartAgent` (can be set by providing property `bcDomain` in agent config)
 
-### Fixes
-### Deprecations
-
 
 ## Version 1.0.0
 ### Features
@@ -84,8 +89,6 @@
 - required pushing smart-agent specific account and key configuration into the smart-agents
 - postinstall script to link smart-contract-core
 - dependencies for released smart-contracts-core@1.0.3 and api-blockchain-core@1.1.0
-### Fixes
-### Deprecations
 
 
 ## Version 0.9.0
