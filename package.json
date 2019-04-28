@@ -17,7 +17,8 @@
     "cross-env": "latest",
     "dirty-chai": "latest",
     "mocha": "latest",
-    "standard": "latest"
+    "standard": "latest",
+    "cp-cli": "latest"
   },
   "engines": {
     "node": ">=8.0.0"
