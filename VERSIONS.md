@@ -3,9 +3,12 @@
 ## Next Version
 ### Features
 ### Fixes
-- fix multi platform installations
 ### Deprecations
 
+
+## Version 1.6.1
+### Fixes
+- fix multi platform installations
 
 ## Version 1.6.0
 ### Features
