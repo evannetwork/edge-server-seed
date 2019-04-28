@@ -3,6 +3,7 @@
 ## Next Version
 ### Features
 ### Fixes
+- fix multi platform installations
 ### Deprecations
 
 
