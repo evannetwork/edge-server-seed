@@ -28,7 +28,7 @@
     "actionhero": "env-cmd ./.env.local actionhero",
     "debug": "env-cmd ./.env.local node --inspect --preserve-symlinks ../../actionhero/bin/actionhero",
     "debugbrk": "env-cmd ./.env.local node --inspect-brk --preserve-symlinks ../../actionhero/bin/actionhero",
-    "postinstall": "npx cpy-cli ../smart-contracts-core/config/smart-contracts-core.js config/ && npx mkdirp node_modules/@evan.network && cd node_modules/\\@evan.network && ln -sf ../../../smart-contracts-core smart-contracts-core",
+    "postinstall": "npx cpy-cli ../smart-contracts-core/config/smart-contracts-core.js config/ && npx mkdirp node_modules/@evan.network && cd node_modules/\\@evan.network && npx lnk-cli ../../../smart-contracts-core smart-contracts-core",
     "pretest": "env-cmd ./.env.local standard",
     "start": "env-cmd ./.env.local node --preserve-symlinks ../../actionhero/bin/actionhero",
     "test": "env-cmd ./.env.local cross-env NODE_ENV=test mocha"
