@@ -1,7 +1,7 @@
 {
   "author": "evan GmbH",
   "dependencies": {
-    "@evan.network/api-blockchain-core": "^2.8.1",
+    "@evan.network/api-blockchain-core": "git+ssh://git@github.com:evannetwork/api-blockchain-core.git#develop",
     "@evan.network/smart-contracts-core": "^2.1.0",
     "actionhero": "^19.1.0",
     "env-cmd": "^7.0.0",
