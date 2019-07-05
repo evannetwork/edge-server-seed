@@ -31,7 +31,11 @@ module.exports = class Eth extends Initializer {
     this.stopPriority = 2100
 
     this.reconnecting = false
-    this.web3 = new Web3(api.config.eth.provider.url, null, { transactionConfirmationBlocks: 1 });
+
+    const provider = new Web3.providers.WebsocketProvider(
+      api.config.eth.provider.url,
+      { clientConfig: { keepalive: true, keepaliveInterval: 5000 } });
+    this.web3 = new Web3(provider, null, { transactionConfirmationBlocks: 1 });
     this.blockEmitter = new EventEmitter();
   }
 
