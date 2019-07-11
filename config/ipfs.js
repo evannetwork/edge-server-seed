@@ -26,19 +26,6 @@
   }
 }
 
-
-exports['testcore'] = {
-  ipfs: (api) => {
-    return {
-      remoteNode: {
-        host: 'ipfs.test.evan.network',
-        port: '443',
-        protocol: 'https',
-      }
-    }
-  }
-}
-
 exports['core'] = {
   ipfs: (api) => {
     return {
