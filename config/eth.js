@@ -1,12 +1,12 @@
 /*
   Copyright (c) 2018-present evan GmbH.
- 
+
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
   You may obtain a copy of the License at
- 
+
       http://www.apache.org/licenses/LICENSE-2.0
- 
+
   Unless required by applicable law or agreed to in writing, software
   distributed under the License is distributed on an "AS IS" BASIS,
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,7 +20,7 @@ exports['default'] = {
     The blockchain account keys used by the different components,
     Format:
       "accountID" : "private key",
-    
+
     any smart agent or other component has its own 'ethAccounts' section,
     which will be merged into one object
   */
@@ -29,7 +29,7 @@ exports['default'] = {
     '0xd9264cfd4eb749babe7dcaace96b5bfb99d9d775858a039f0f340f412a925092':
       '346c22768f84f3050f5c94cec98349b3c5cbfa0b7315304e13647a4918ffff22'
   },
-  
+
   eth: (api) => {
     return {
       provider: {
@@ -44,7 +44,7 @@ exports['default'] = {
         // if truthy, ignore given gas value, 1.1 ==> adds 10% to estimated value
         alwaysAutoGasLimit: process.env.AUTO_GAS_LIMIT || 1.1,
       },
-      nameResolver: {    
+      nameResolver: {
         ensAddress: process.env.ENS_ADDRESS || '0x937bbC1d3874961CA38726E9cD07317ba81eD2e1',
         ensResolver: process.env.ENS_RESOLVER || '0xDC18774FA2E472D26aB91deCC4CDd20D9E82047e',
         labels: {
@@ -69,6 +69,22 @@ exports['default'] = {
           profileFactory: ['profile', 'factory', 'ensRoot'],
           root: ['ensRoot'],
         },
+      }
+    }
+  }
+}
+
+
+exports['core'] = {
+  eth: (api) => {
+    return {
+      provider: {
+        // parity/geth endpoint
+        url: process.env.ETH_WS_ADDRESS || 'wss://core.evan.network/ws',
+      },
+      nameResolver: {
+        ensAddress: process.env.ENS_ADDRESS || '0xc913ac6522344187bc9C88C9f9302b005500FfF9',
+        ensResolver: process.env.ENS_RESOLVER || '0xa4cfA55769dc770F33402e3d669dc96c0e46c6c4',
       }
     }
   }
