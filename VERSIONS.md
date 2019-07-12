@@ -2,8 +2,18 @@
 
 ## Next Version
 ### Features
+
 ### Fixes
+
 ### Deprecations
+
+
+## Version 1.6.2
+### Fixes
+- update blockchain core to 2.8.1, update web3 to beta 55
+- adjust connect to web3 provider
+- add mainnet ipfs config
+- add config for core network
 
 
 ## Version 1.6.1
