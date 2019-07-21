@@ -119,7 +119,7 @@ class SmartAgent {
         async (event) => {
           const handleEvent = async () => {
             const { mailId } = event.returnValues
-            const bmail = await this.runtime.mailbox.getMail(mailId)
+            const bmail = await this.runtime.mailbox.getMail(mailId.toString())
             if (bmail.content && bmail.content.attachments && bmail.content.attachments.length) {
               const attachments = bmail.content.attachments
               const mailType = attachments[0].type
