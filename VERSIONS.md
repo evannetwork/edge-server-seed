@@ -4,6 +4,7 @@
 ### Features
 
 ### Fixes
+- add missing request version to package
 
 ### Deprecations
 
