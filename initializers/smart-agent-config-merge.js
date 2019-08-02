@@ -38,10 +38,10 @@ module.exports = class SmartAgentCore extends Initializer {
           // current config file into discovered config, do not overwrite current config values
           const localConfig = require(`${configPath}/${file}`)
           if (localConfig['default']) {
-            api.config = api.utils.hashMerge(localConfig['default'], api.config, api)
+            api.config = api.utils.hashMerge(api.config, localConfig['default'], api)
           }
           if (localConfig[api.env]) {
-            api.config = api.utils.hashMerge(localConfig[api.env], api.config, api)
+            api.config = api.utils.hashMerge(api.config, localConfig[api.env], api)
           }
         }
       }
