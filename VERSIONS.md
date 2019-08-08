@@ -8,6 +8,12 @@
 ### Deprecations
 
 
+## Version 1.6.3
+### Fixes
+- add missing request version to package
+- adjust config to preserve raw post body
+
+
 ## Version 1.6.2
 ### Fixes
 - update blockchain core to 2.8.1, update web3 to beta 55

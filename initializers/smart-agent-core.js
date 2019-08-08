@@ -70,14 +70,20 @@ class SmartAgent {
         privateKey: '0x' + api.config.ethAccounts[this.config.ethAccount]
       })
 
+      const runtimeConfig = {
+        accountMap: { [this.config.ethAccount]: api.config.ethAccounts[this.config.ethAccount] },
+        nameResolver: nameResolverConfig,
+        keyConfig: api.config.encryptionKeys
+      }
+
+      if (this.config.runtimeConfig && this.config.runtimeConfig.hasOwnProperty('gasPrice')) {
+        runtimeConfig.gasPrice = this.config.runtimeConfig.gasPrice
+      }
+
       this.runtime = await createDefaultRuntime(
         web3 || api.eth.web3,
         this.dfs,
-        {
-          accountMap: { [this.config.ethAccount]: api.config.ethAccounts[this.config.ethAccount] },
-          nameResolver: nameResolverConfig,
-          keyConfig: api.config.encryptionKeys
-        },
+        runtimeConfig,
         {
           logger: new Logger({ log: api.log, logLevel: 'debug' })
         }
@@ -119,7 +125,7 @@ class SmartAgent {
         async (event) => {
           const handleEvent = async () => {
             const { mailId } = event.returnValues
-            const bmail = await this.runtime.mailbox.getMail(mailId)
+            const bmail = await this.runtime.mailbox.getMail(mailId.toString())
             if (bmail.content && bmail.content.attachments && bmail.content.attachments.length) {
               const attachments = bmail.content.attachments
               const mailType = attachments[0].type
