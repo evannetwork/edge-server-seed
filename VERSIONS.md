@@ -4,10 +4,14 @@
 ### Features
 
 ### Fixes
-- add missing request version to package
-- adjust config to preserve raw post body
 
 ### Deprecations
+
+
+## Version 1.6.3
+### Fixes
+- add missing request version to package
+- adjust config to preserve raw post body
 
 
 ## Version 1.6.2
