@@ -5,6 +5,7 @@
 
 ### Fixes
 - add missing request version to package
+- adjust config to preserve raw post body
 
 ### Deprecations
 
