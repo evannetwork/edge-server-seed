@@ -16,7 +16,6 @@ const _ensureAuth = (connection) => {
 
   const splitAuthHeader = connection.rawConnection.req.headers.authorization.split(',')
   const authComponents = {}
-  const signedTime = parseInt(authComponents.EvanMessage, 10)
 
   splitAuthHeader.forEach(authHeader => {
     const splitHeader = authHeader.split(' ')
@@ -24,7 +23,9 @@ const _ensureAuth = (connection) => {
     authComponents[splitHeader[0]] = splitHeader[1]
   })
 
-  if (signedTime + MAX_AGE < Date.now()) {
+  const signedTime = parseInt(authComponents.EvanMessage, 10)
+
+  if (signedTime + MAX_AGE < Date.now() || isNaN(signedTime)) {
     throw new Error('Signed message has been expired.')
   }
 
