@@ -15,27 +15,24 @@
 */
 
 'use strict'
-const { Initializer, api } = require('actionhero')
 
-const SmartAgent = require('../common/smart-agent')
-const { authMiddleware } = require('../middlewares/authentication')
+const { Action, api } = require('actionhero')
 
-module.exports = class SmartAgentCore extends Initializer {
+class Authenticated extends Action {
   constructor () {
     super()
-    this.name = 'smart-agent-core'
-    this.loadPriority = 2300
-    this.startPriority = 2300
-    this.stopPriority = 2300
-  }
-
-  async initialize () {
-    api.smartAgents = {
-      SmartAgent,
-      registeredAgents: []
+    this.name = 'authenticated'
+    this.description = 'Will check if message is signed properly, will throw error if not.'
+    this.outputExample = {
+      isAuthenticated: true
     }
 
-    // add authentication middleware to agent
-    api.actions.addMiddleware(authMiddleware)
+    this.middleware = ['check for message authentication']
+  }
+
+  async run ({ response }) {
+    response.isAuthenticated = true
   }
 }
+
+module.exports = Authenticated
