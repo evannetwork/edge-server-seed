@@ -16,7 +16,7 @@
 
 'use strict'
 
-const { Action, api } = require('actionhero')
+const { Action } = require('actionhero')
 
 class Authenticated extends Action {
   constructor () {

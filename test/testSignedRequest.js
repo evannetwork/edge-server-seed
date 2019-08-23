@@ -46,10 +46,10 @@ const getAuthHeaders = (runtime, accountId, privateKey, timeOffset = 0) => {
 }
 
 describe('Test signed requests', function () {
-  this.timeout(15000);
+  this.timeout(15000)
 
   before(async () => {
-    api = await actionhero.start();
+    api = await actionhero.start()
 
     const runtimeConfig = {
       // account map to blockchain accounts with their private key
@@ -59,7 +59,7 @@ describe('Test signed requests', function () {
       },
       // key configuration for private data handling
       keyConfig: {
-        '0x1e7f9CE1aF9f1cB882997F730803dfb30B244b4F': 'Test1234',
+        '0x1e7f9CE1aF9f1cB882997F730803dfb30B244b4F': 'Test1234'
       },
       // ipfs configuration for evan.network storage
       ipfs: { host: 'ipfs.test.evan.network', port: '443', protocol: 'https' },
@@ -85,7 +85,7 @@ describe('Test signed requests', function () {
   })
 
   after(async () => {
-    await actionhero.stop();
+    await actionhero.stop()
   })
 
   it('should have booted into the test env', () => {
@@ -95,7 +95,7 @@ describe('Test signed requests', function () {
   })
 
   it('can retrieve successfull auth status', async () => {
-    const connection = await api.specHelper.Connection.createAsync();
+    const connection = await api.specHelper.Connection.createAsync()
     connection.rawConnection.req = {
       headers: getAuthHeaders(
         testAccountRuntime,
@@ -103,15 +103,14 @@ describe('Test signed requests', function () {
         '0x1a4109c1b38876217c0cafbed666c8d6d1522e34e89982e1c33d1e96119979e8'
       )
     }
-    const {error, isAuthenticated} = await api.specHelper.runAction( 'authenticated', connection);
+    const { error, isAuthenticated } = await api.specHelper.runAction('authenticated', connection)
 
-    expect(error).to.be.eq(undefined);
+    expect(error).to.be.eq(undefined)
     expect(isAuthenticated).to.be.eq(true)
   })
 
-
   it('can retrieves error when auth failed', async () => {
-    const connection = await api.specHelper.Connection.createAsync();
+    const connection = await api.specHelper.Connection.createAsync()
     connection.rawConnection.req = {
       headers: getAuthHeaders(
         testAccountRuntime,
@@ -119,14 +118,14 @@ describe('Test signed requests', function () {
         '0xf567916caecd6fe3ef1b2f531b5353999c3c3d659b30a99d5b2b170f474a52b8' // wrong private key
       )
     }
-    const {error, isAuthenticated} = await api.specHelper.runAction( 'authenticated', connection);
+    const { error, isAuthenticated } = await api.specHelper.runAction('authenticated', connection)
 
-    expect(error).to.be.not.empty();
+    expect(error).to.be.not.empty()
     expect(isAuthenticated).to.be.eq(undefined)
   })
 
   it('can retrieves error when auth time is to long ago', async () => {
-    const connection = await api.specHelper.Connection.createAsync();
+    const connection = await api.specHelper.Connection.createAsync()
     connection.rawConnection.req = {
       headers: getAuthHeaders(
         testAccountRuntime,
@@ -135,9 +134,9 @@ describe('Test signed requests', function () {
         (-6 * 60 * 1000) // 6 minutes before
       )
     }
-    const {error, isAuthenticated} = await api.specHelper.runAction( 'authenticated', connection);
+    const { error, isAuthenticated } = await api.specHelper.runAction('authenticated', connection)
 
-    expect(error).to.be.eq('Error: Signed message has been expired.');
+    expect(error).to.be.eq('Error: Signed message has been expired.')
     expect(isAuthenticated).to.be.eq(undefined)
   })
 })

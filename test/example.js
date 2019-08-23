@@ -29,14 +29,14 @@ const actionhero = new ActionHero.Process()
 let api
 
 describe('Actionhero status Tests', function () {
-  this.timeout(15000);
+  this.timeout(15000)
 
   before(async () => {
-    api = await actionhero.start();
+    api = await actionhero.start()
   })
 
   after(async () => {
-    await actionhero.stop();
+    await actionhero.stop()
   })
 
   it('should have booted into the test env', () => {
@@ -46,7 +46,7 @@ describe('Actionhero status Tests', function () {
   })
 
   it('can retrieve server uptime via the status action', async () => {
-    let {uptime} = await api.specHelper.runAction('status')
+    const { uptime } = await api.specHelper.runAction('status')
 
     expect(uptime).to.be.above(0)
   })

@@ -15,6 +15,7 @@
 */
 
 'use strict'
+const { api } = require('actionhero')
 const request = require('request')
 const schedule = require('node-schedule')
 const { Logger } = require('@evan.network/dbcp')

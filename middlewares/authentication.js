@@ -1,7 +1,7 @@
 'use strict'
 const { api } = require('actionhero')
 
-const MAX_AGE = 1000 * 60 * 5; // max age of signed message is 5m
+const MAX_AGE = 1000 * 60 * 5 // max age of signed message is 5m
 
 /**
  * verify auth headers; example for creating a signed auth header:
@@ -48,7 +48,7 @@ const authMiddleware = {
   name: 'check for message authentication',
   global: false,
   priority: 10,
-  preProcessor: ({connection}) => {
+  preProcessor: ({ connection }) => {
     _ensureAuth(connection)
   }
 }
