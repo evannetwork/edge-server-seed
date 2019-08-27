@@ -2,6 +2,7 @@
 
 ## Next Version
 ### Features
+- add middleware `check for message authentication`, that checks if action was called with up to date auth headers
 
 ### Fixes
 

@@ -23,7 +23,7 @@ const dirtyChai = require('dirty-chai')
 const IpfsApi = require('ipfs-api')
 const Web3 = require('web3')
 
-const { createDefaultRuntime, Ipfs } = require('@evan.network/api-blockchain-core')
+const { createDefaultRuntime, Ipfs, getSmartAgentAuthHeaders } = require('@evan.network/api-blockchain-core')
 
 const expect = chai.expect
 chai.use(dirtyChai)
@@ -32,9 +32,19 @@ const ActionHero = require('actionhero')
 const actionhero = new ActionHero.Process()
 let api, testAccountRuntime
 
-const getAuthHeaders = (runtime, accountId, privateKey, timeOffset = 0) => {
+const getAuthHeaders = async (runtime, timeOffset = 0) => {
+  return {
+    authorization: timeOffset
+      ? await getSmartAgentAuthHeaders(testAccountRuntime, `${Date.now() + timeOffset}`)
+      : await getSmartAgentAuthHeaders(testAccountRuntime)
+  }
+}
+const getAuthHeadersWithWrongKey = (runtime, timeOffset = 0) => {
+  const accountId = '0x1e7f9CE1aF9f1cB882997F730803dfb30B244b4F'
+  const privateKey = '0xf567916caecd6fe3ef1b2f531b5353999c3c3d659b30a99d5b2b170f474a52b8' // wrong
   const message = `${Date.now() + timeOffset}`
-  const signature = runtime.web3.eth.accounts.sign(message, privateKey).signature
+  const signature = runtime.web3.eth.accounts.sign(
+    message, privateKey).signature
 
   return {
     authorization: [
@@ -97,11 +107,7 @@ describe('Test signed requests', function () {
   it('can retrieve successfull auth status', async () => {
     const connection = await api.specHelper.Connection.createAsync()
     connection.rawConnection.req = {
-      headers: getAuthHeaders(
-        testAccountRuntime,
-        '0x1e7f9CE1aF9f1cB882997F730803dfb30B244b4F',
-        '0x1a4109c1b38876217c0cafbed666c8d6d1522e34e89982e1c33d1e96119979e8'
-      )
+      headers: await getAuthHeaders(testAccountRuntime)
     }
     const { error, isAuthenticated } = await api.specHelper.runAction('authenticated', connection)
 
@@ -112,11 +118,7 @@ describe('Test signed requests', function () {
   it('can retrieves error when auth failed', async () => {
     const connection = await api.specHelper.Connection.createAsync()
     connection.rawConnection.req = {
-      headers: getAuthHeaders(
-        testAccountRuntime,
-        '0x1e7f9CE1aF9f1cB882997F730803dfb30B244b4F',
-        '0xf567916caecd6fe3ef1b2f531b5353999c3c3d659b30a99d5b2b170f474a52b8' // wrong private key
-      )
+      headers: getAuthHeadersWithWrongKey(testAccountRuntime)
     }
     const { error, isAuthenticated } = await api.specHelper.runAction('authenticated', connection)
 
@@ -127,12 +129,7 @@ describe('Test signed requests', function () {
   it('can retrieves error when auth time is to long ago', async () => {
     const connection = await api.specHelper.Connection.createAsync()
     connection.rawConnection.req = {
-      headers: getAuthHeaders(
-        testAccountRuntime,
-        '0x1e7f9CE1aF9f1cB882997F730803dfb30B244b4F',
-        '0x1a4109c1b38876217c0cafbed666c8d6d1522e34e89982e1c33d1e96119979e8',
-        (-6 * 60 * 1000) // 6 minutes before
-      )
+      headers: await getAuthHeaders(testAccountRuntime, (-6 * 60 * 1000)) // 6 minutes before
     }
     const { error, isAuthenticated } = await api.specHelper.runAction('authenticated', connection)
 
