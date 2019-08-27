@@ -310,6 +310,7 @@ class SmartAgent {
    * @return     {Promise}  result of request
    */
   async _promisifyRequest (options) {
+    let chunks = ''
     return new Promise(async (resolve, reject) => {
       request({
         method: 'POST',
@@ -317,8 +318,11 @@ class SmartAgent {
         headers: await this._getHeaders(),
         ...options
       })
-        .on('data', (responseRaw) => {
-          const response = JSON.parse(responseRaw.toString('utf-8'))
+        .on('data', (chunk) => {
+          chunks += chunk
+        })
+        .on('end', (responseRaw) => {
+          const response = JSON.parse(chunks)
           if (response.status === 'error') {
             reject(new Error(`request "${options.url}" failed; ${response.error}`))
           } else {
