@@ -17,7 +17,7 @@
 'use strict'
 const { Initializer, api } = require('actionhero')
 
-const SmartAgent = require('../common/smart-agent')
+const SmartAgent = require('../lib/smart-agent')
 const { authMiddleware } = require('../middlewares/authentication')
 
 module.exports = class SmartAgentCore extends Initializer {
