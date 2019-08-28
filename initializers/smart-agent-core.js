@@ -19,7 +19,7 @@ const request = require('request')
 const schedule = require('node-schedule')
 const { Initializer, api } = require('actionhero')
 const { Logger } = require('@evan.network/dbcp')
-const { createDefaultRuntime, Ipfs, Profile } = require('@evan.network/api-blockchain-core')
+const { createDefaultRuntime, Ipfs, Profile, utils } = require('@evan.network/api-blockchain-core')
 
 class SmartAgent {
   constructor (config) {
@@ -285,21 +285,8 @@ class SmartAgent {
    * @return     {Promise}  headers for request
    */
   async _getHeaders () {
-    const toSignedMessage = this.runtime.nameResolver
-      .soliditySha3(new Date().getTime() + this.config.ethAccount)
-      .replace('0x', '')
-    const hexMessage = this.runtime.web3.utils.utf8ToHex(toSignedMessage)
-    const privateKey =
-      await this.runtime.executor.signer.accountStore.getPrivateKey(this.config.ethAccount)
-    const { signature } =
-      await this.runtime.web3.eth.accounts.sign(toSignedMessage, `0x${privateKey}`)
-
     return {
-      authorization: [
-        `EvanAuth ${this.config.ethAccount}`,
-        `EvanMessage ${hexMessage}`,
-        `EvanSignedMessage ${signature}`
-      ].join(',')
+      authorization: await utils.getSmartAgentAuthHeaders(this.runtime),
     }
   }
 
