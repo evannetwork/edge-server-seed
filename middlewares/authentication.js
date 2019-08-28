@@ -5,7 +5,7 @@ const MAX_AGE = 1000 * 60 * 5 // max age of signed message is 5m
 
 /**
  * verify auth headers; example for creating a signed auth header:
- * web3.eth.accounts.sign(`${accountId}|${Date.now()}`, `0x${privateKey}`)
+ * web3.eth.accounts.sign(`${Date.now()}`, `0x${privateKey}`)
  *
  * @param {any} connection actionhero connection instance
  */
