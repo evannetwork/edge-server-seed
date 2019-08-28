@@ -23,7 +23,8 @@ const dirtyChai = require('dirty-chai')
 const IpfsApi = require('ipfs-api')
 const Web3 = require('web3')
 
-const { createDefaultRuntime, Ipfs, getSmartAgentAuthHeaders } = require('@evan.network/api-blockchain-core')
+const { createDefaultRuntime, Ipfs, utils: { getSmartAgentAuthHeaders } } =
+  require('@evan.network/api-blockchain-core')
 
 const expect = chai.expect
 chai.use(dirtyChai)
