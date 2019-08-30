@@ -27,7 +27,7 @@ class Authenticated extends Action {
       isAuthenticated: true
     }
 
-    this.middleware = ['check for message authentication']
+    this.middleware = ['ensureEvanAuth']
   }
 
   async run ({ response }) {

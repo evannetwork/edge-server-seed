@@ -38,14 +38,15 @@ const _ensureAuth = (connection) => {
     throw new Error('No verified Account.')
   }
 
-  return authComponents
+  // attach the authenticated accountId to the connection
+  connection.evanAuth = authComponents
 }
 
 /**
  * Usage: api.actions.addMiddleware(authMiddleware) in initializer
  */
 const authMiddleware = {
-  name: 'check for message authentication',
+  name: 'ensureEvanAuth',
   global: false,
   priority: 10,
   preProcessor: ({ connection }) => {
