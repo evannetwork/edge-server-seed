@@ -14,29 +14,20 @@
   limitations under the License.
 */
 
-'use strict'
-const { Initializer, api } = require('actionhero')
+// but usually you want your project contracts to load
+const projectContracts = '../../../build/contracts'
 
-const SmartAgent = require('../lib/smart-agent')
-const { authMiddleware } = require('../middlewares/authentication')
+//  or in deployments, you want to load the contracts from the contracts directory
+const deployedContracts = '../../../contracts'
 
-
-module.exports = class SmartAgentCore extends Initializer {
-  constructor () {
-    super()
-    this.name = 'smart-agent-core'
-    this.loadPriority = 2300
-    this.startPriority = 2300
-    this.stopPriority = 2300
-  }
-
-  async initialize () {
-    api.smartAgents = {
-      SmartAgent,
-      registeredAgents: []
+exports['default'] = {
+  smartContractsCore: () => {
+    return {
+      compileContracts: false,
+      additionalPaths: [],
+      // when a list is given, the contructor picks the first directory it finds contracts in,
+      // if nothing is found it falls back to the smart-contracts-core contracts
+      destinationPath: [projectContracts, deployedContracts]
     }
-
-    // add authentication middleware to agent
-    api.actions.addMiddleware(authMiddleware)
   }
 }
