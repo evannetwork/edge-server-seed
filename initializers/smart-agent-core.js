@@ -20,6 +20,7 @@ const { Initializer, api } = require('actionhero')
 const SmartAgent = require('../lib/smart-agent')
 const { authMiddleware } = require('../middlewares/authentication')
 
+
 module.exports = class SmartAgentCore extends Initializer {
   constructor () {
     super()

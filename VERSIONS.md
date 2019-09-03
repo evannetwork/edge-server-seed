@@ -5,6 +5,7 @@
 - add middleware `check for message authentication`, that checks if action was called with up to date auth headers
 
 ### Fixes
+- use new `getSmartAgentAuthHeaders` to build `EvanAuth` header for smart-agent requests
 
 ### Deprecations
 
