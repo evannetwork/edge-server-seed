@@ -23,7 +23,7 @@ const _ensureAuth = (connection) => {
     authComponents[splitHeader[0]] = splitHeader[1]
   })
 
-  const signedTime = parseInt(authComponents.EvanMessage, 10)
+  const signedTime = parseInt(authComponents.EvanMessage, 16)
 
   if (signedTime + MAX_AGE < Date.now() || isNaN(signedTime)) {
     throw new Error('Signed message has been expired.')
