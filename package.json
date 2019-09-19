@@ -1,20 +1,20 @@
 {
   "author": "evan GmbH",
   "dependencies": {
-    "@evan.network/api-blockchain-core": "^2.8.3",
-    "@evan.network/smart-contracts-core": "^2.4.2",
+    "@evan.network/api-blockchain-core": "^2.12.0",
+    "@evan.network/smart-contracts-core": "^2.6.1",
     "actionhero": "^19.1.0",
     "env-cmd": "^7.0.0",
     "fakeredis": "latest",
     "ioredis": "latest",
     "node-schedule": "^1.3.2",
-    "web3": "1.0.0-beta.55",
+    "request": "^2.88.0",
+    "web3": "2.0.0-alpha",
     "ws": "latest"
   },
   "description": "evan.network edge server",
   "devDependencies": {
     "chai": "latest",
-    "cross-env": "latest",
     "dirty-chai": "latest",
     "mocha": "latest",
     "standard": "latest"
@@ -29,9 +29,9 @@
     "debug": "env-cmd ./.env.local node --inspect --preserve-symlinks ../../actionhero/bin/actionhero",
     "debugbrk": "env-cmd ./.env.local node --inspect-brk --preserve-symlinks ../../actionhero/bin/actionhero",
     "postinstall": "npx cpy-cli ../smart-contracts-core/config/smart-contracts-core.js config/ && npx mkdirp node_modules/@evan.network && cd node_modules/\\@evan.network && npx lnk-cli ../../../smart-contracts-core smart-contracts-core",
-    "pretest": "env-cmd ./.env.local standard",
+    "standalone": "env-cmd ./.env.local node --preserve-symlinks ./node_modules/actionhero/bin/actionhero",
     "start": "env-cmd ./.env.local node --preserve-symlinks ../../actionhero/bin/actionhero",
-    "test": "env-cmd ./.env.local cross-env NODE_ENV=test mocha"
+    "test": "env-cmd ./.env.local mocha"
   },
   "standard": {
     "globals": [
@@ -47,5 +47,5 @@
       "public/javascript/ActionheroWebsocketClient.*"
     ]
   },
-  "version": "1.6.2"
+  "version": "1.7.0"
 }

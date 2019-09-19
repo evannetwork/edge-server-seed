@@ -1,12 +1,12 @@
 /*
   Copyright (c) 2018-present evan GmbH.
- 
+
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
   You may obtain a copy of the License at
- 
+
       http://www.apache.org/licenses/LICENSE-2.0
- 
+
   Unless required by applicable law or agreed to in writing, software
   distributed under the License is distributed on an "AS IS" BASIS,
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,9 +31,9 @@ module.exports = class RandomNumber extends ActionHero.Action {
     this.name = 'status'
     this.description = 'I will return some basic information about the API'
     this.outputExample = {
-      'id': '192.168.2.11',
-      'actionheroVersion': '9.4.1',
-      'uptime': 10469
+      id: '192.168.2.11',
+      actionheroVersion: '9.4.1',
+      uptime: 10469
     }
   }
 
@@ -48,7 +48,8 @@ module.exports = class RandomNumber extends ActionHero.Action {
 
   async checkEventLoop (data) {
     const api = ActionHero.api
-    let eventLoopDelay = await api.utils.eventLoopDelay(10000)
+    const eventLoopDelay = await api.utils.eventLoopDelay(10000)
+
     data.response.eventLoopDelay = eventLoopDelay
     if (eventLoopDelay > maxEventLoopDelay) {
       data.response.nodeStatus = data.connection.localize('Node Unhealthy')
@@ -58,8 +59,9 @@ module.exports = class RandomNumber extends ActionHero.Action {
 
   async checkResqueQueues (data) {
     const api = ActionHero.api
-    let details = await api.tasks.details()
+    const details = await api.tasks.details()
     let length = 0
+
     Object.keys(details.queues).forEach((q) => {
       length += details.queues[q].length
     })

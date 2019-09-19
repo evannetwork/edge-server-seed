@@ -8,6 +8,21 @@
 ### Deprecations
 
 
+## Version 1.7.0
+### Features
+- add middleware `check for message authentication`, that checks if action was called with up to date auth headers
+
+### Fixes
+- use new `getSmartAgentAuthHeaders` to build `EvanAuth` header for smart-agent requests
+- parse time as hex message
+
+
+## Version 1.6.3
+### Fixes
+- add missing request version to package
+- adjust config to preserve raw post body
+
+
 ## Version 1.6.2
 ### Fixes
 - update blockchain core to 2.8.1, update web3 to beta 55
