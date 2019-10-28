@@ -4,6 +4,7 @@
 ### Features
 
 ### Fixes
+- add ens names to config for digital twin factories
 
 ### Deprecations
 
