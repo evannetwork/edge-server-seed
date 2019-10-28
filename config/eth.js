@@ -50,26 +50,28 @@ exports['default'] = {
         labels: {
           admin: 'admin',
           businessCenterRoot: process.env.BC_ROOT || 'testbc.evan',
+          container: 'container',
           ensRoot: process.env.ENS_ROOT || 'evan',
           eventhub: 'eventhub',
           factory: 'factory',
+          index: 'index',
           mailbox: 'mailbox',
-          payments: 'payments',
           profile: 'profile',
           wallet: 'wallet',
         },
         domains: {
           adminFactory: ['admin', 'factory', 'ensRoot'],
           businessCenter: ['businessCenterRoot'],
+          containerFactory: ['container', 'factory', 'ensRoot'],
           eventhub: process.env.ENS_EVENTS || ['eventhub', 'ensRoot'],
           factory: ['factory', 'businessCenterRoot'],
+          indexFactory: ['index', 'factory', 'ensRoot'],
           mailbox: process.env.ENS_MAILBOX || ['mailbox', 'ensRoot'],
-          payments: ['payments', 'ensRoot'],
           profile: process.env.ENS_PROFILES || ['profile', 'ensRoot'],
           profileFactory: ['profile', 'factory', 'ensRoot'],
           root: ['ensRoot'],
         },
-      }
+      },
     }
   }
 }
