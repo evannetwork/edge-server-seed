@@ -8,6 +8,11 @@
 ### Deprecations
 
 
+## Version 1.7.1
+### Fixes
+- add ens names to config for digital twin factories
+
+
 ## Version 1.7.0
 ### Features
 - add middleware `check for message authentication`, that checks if action was called with up to date auth headers
