@@ -4,9 +4,13 @@
 ### Features
 
 ### Fixes
-- add ens names to config for digital twin factories
 
 ### Deprecations
+
+
+## Version 1.7.1
+### Fixes
+- add ens names to config for digital twin factories
 
 
 ## Version 1.7.0
