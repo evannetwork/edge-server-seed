@@ -20,7 +20,6 @@
 
 const chai = require('chai')
 const chaiAsPromised = require('chai-as-promised');
-//const dirtyChai = require('dirty-chai')
 
 
 const expect = chai.expect
@@ -49,7 +48,6 @@ describe('Actionhero status Tests', function () {
     }
 
     const test = new TestClass({});
-    console.log(test)
     await expect(test.initialize()).to.be.rejectedWith('No account has been configured') 
   })
 
@@ -61,9 +59,8 @@ describe('Actionhero status Tests', function () {
     }
 
     const test = new TestClass({
-          ethAccount:'0x0000000000000000000000000000000000000000',
-        });
-    console.log(test)
+          ethAccount:'0x0000000000000000000000000000000000000000'
+        })
     await expect(test.initialize()).to.be.rejectedWith('accountId does not exist') 
   })
 
@@ -73,13 +70,11 @@ describe('Actionhero status Tests', function () {
         super(config)
       }
     }
-    // add temporary account to api
-    //api.config.ethAccounts['0x15B10D6521D17a205eaC67b41770c7F447431d89'] = ''
+    // remove account from config (if present)
     delete api.config.ethAccounts['0x15B10D6521D17a205eaC67b41770c7F447431d89']
     const test = new TestClass({
-      ethAccount: '0x15B10D6521D17a205eaC67b41770c7F447431d89',
-    });
-    console.log(test)
+      ethAccount: '0x15B10D6521D17a205eaC67b41770c7F447431d89'
+    })
     await expect(test.initialize()).to.be.rejectedWith('The private key for 0x15B10D6521D17a205eaC67b41770c7F447431d89 does not exist') 
   })  
 
@@ -92,9 +87,8 @@ describe('Actionhero status Tests', function () {
     // add temporary account to api
     api.config.ethAccounts['0x15B10D6521D17a205eaC67b41770c7F447431d89'] = '185f24bfafc1493b005de1d350d6853eca0555f678013dd3f555cc939e7a1ac2'
     const test = new TestClass({
-      ethAccount: '0x15B10D6521D17a205eaC67b41770c7F447431d89',
-    });
-    console.log(test)
+      ethAccount: '0x15B10D6521D17a205eaC67b41770c7F447431d89'
+    })
     await expect(test.initialize()).to.not.be.rejected 
   })  
 })
