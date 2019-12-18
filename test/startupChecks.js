@@ -59,8 +59,8 @@ describe('Actionhero status Tests', function () {
     }
 
     const test = new TestClass({
-          ethAccount:'0x0000000000000000000000000000000000000000'
-        })
+      ethAccount:'0x0000000000000000000000000000000000000000'
+    })
     await expect(test.initialize()).to.be.rejectedWith('accountId does not exist') 
   })
 
@@ -89,6 +89,6 @@ describe('Actionhero status Tests', function () {
     const test = new TestClass({
       ethAccount: '0x15B10D6521D17a205eaC67b41770c7F447431d89'
     })
-    await expect(test.initialize()).to.not.be.rejected 
+    await expect(test.initialize()).not.to.be.rejected 
   })  
 })
