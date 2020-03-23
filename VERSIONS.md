@@ -2,6 +2,7 @@
 
 ## Next Version
 ### Features
+- remove requester information on default
 
 ### Fixes
 
