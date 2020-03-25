@@ -1,5 +1,6 @@
 'use strict'
 const { api } = require('actionhero')
+const SmartAgent = require('../lib/smart-agent')
 
 const MAX_AGE = 1000 * 60 * 5 // max age of signed message is 5m
 
@@ -9,7 +10,7 @@ const MAX_AGE = 1000 * 60 * 5 // max age of signed message is 5m
  *
  * @param {any} connection actionhero connection instance
  */
-const _ensureAuth = (connection) => {
+const _ensureAuth = async (connection) => {
   if (!connection.rawConnection.req.headers.authorization) {
     throw new Error('no authorization headers provided')
   }
@@ -38,6 +39,57 @@ const _ensureAuth = (connection) => {
     throw new Error('No verified Account.')
   }
 
+  // if no identity was passed as auth header, check for old / new profile and try to load identity
+  const runtime = api.smartAgentCore.runtime;
+  if (!authComponents.EvanIdentity) {
+    const nullAddress = '0x0000000000000000000000000000000000000000';
+    const identity = await runtime.verifications
+      .getIdentityForAccount(authComponents.EvanAuth, true)
+    authComponents.EvanIdentity = identity
+
+    // if no identity could be loaded, just use the account as identity
+    if (authComponents.EvanIdentity === nullAddress) {
+      authComponents.EvanIdentity = authComponents.EvanAuth
+    } else {
+      // load profile index to load identities profile address from
+      const profileRegstryDomain = runtime.nameResolver
+        .getDomainName(runtime.nameResolver.config.domains.profile)
+      const profileIndexAddress = await runtime.nameResolver.getAddress(profileRegstryDomain)
+      const profileIndex = runtime.nameResolver.contractLoader
+        .loadContract('ProfileIndexInterface', profileIndexAddress)
+
+      // Check if a identity address has a underlying profile
+      const profileAddress = await runtime.nameResolver.executor.executeContractCall(
+        profileIndex,
+        'getProfile',
+        authComponents.EvanIdentity,
+        { from: authComponents.EvanIdentity },
+      )
+
+      // if no profile could be found, its basically a old profile and we can reset the identity
+      // address
+      if (profileAddress === nullAddress) {
+        authComponents.EvanIdentity = authComponents.EvanAuth
+      }
+    }
+  }
+
+  if (authComponents.EvanAuth !== authComponents.EvanIdentity) {
+    const verificationHolderContract = runtime.contractLoader.loadContract(
+      'VerificationHolder', authComponents.EvanIdentity,
+    );
+    const hasPermissionOnIdentity = await runtime.executor.executeContractCall(
+      verificationHolderContract,
+      'keyHasPurpose',
+      runtime.nameResolver.soliditySha3(authComponents.EvanAuth),
+      '1',
+    );
+
+    if (!hasPermissionOnIdentity) {
+      throw new Error('Account is not permitted for the provided identity.')
+    }
+  }
+
   // attach the authenticated accountId to the connection
   connection.evanAuth = authComponents
 }
@@ -49,8 +101,8 @@ const authMiddleware = {
   name: 'ensureEvanAuth',
   global: false,
   priority: 10,
-  preProcessor: ({ connection }) => {
-    _ensureAuth(connection)
+  preProcessor: async ({ connection }) => {
+    await _ensureAuth(connection)
   }
 }
 
