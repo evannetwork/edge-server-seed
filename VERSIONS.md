@@ -3,10 +3,16 @@
 ## Next Version
 ### Features
 - add `authMessage` identity address support
+- remove requester information on default
 
 ### Fixes
 
 ### Deprecations
+
+
+## Version 1.8.0
+### Features
+- add support for runtime customization
 
 
 ## Version 1.7.1
