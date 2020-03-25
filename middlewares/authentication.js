@@ -4,6 +4,13 @@ const SmartAgent = require('../lib/smart-agent')
 
 const MAX_AGE = 1000 * 60 * 5 // max age of signed message is 5m
 
+// save account-identity mappings and profile addresses to reduce auth middleware load time
+const authCache = {
+  profileIndexAddress: '',
+  identity: { },
+  profile: { },
+};
+
 /**
  * verify auth headers; example for creating a signed auth header:
  * web3.eth.accounts.sign(`${Date.now()}`, `0x${privateKey}`)
@@ -43,7 +50,7 @@ const _ensureAuth = async (connection) => {
   const runtime = api.smartAgentCore.runtime;
   if (!authComponents.EvanIdentity) {
     const nullAddress = '0x0000000000000000000000000000000000000000';
-    const identity = await runtime.verifications
+    const identity = authCache.identity[authComponents.EvanAuth] || await runtime.verifications
       .getIdentityForAccount(authComponents.EvanAuth, true)
     authComponents.EvanIdentity = identity
 
@@ -51,25 +58,33 @@ const _ensureAuth = async (connection) => {
     if (authComponents.EvanIdentity === nullAddress) {
       authComponents.EvanIdentity = authComponents.EvanAuth
     } else {
-      // load profile index to load identities profile address from
-      const profileRegstryDomain = runtime.nameResolver
-        .getDomainName(runtime.nameResolver.config.domains.profile)
-      const profileIndexAddress = await runtime.nameResolver.getAddress(profileRegstryDomain)
+      authCache.identity[authComponents.EvanAuth] = identity
+
+      if (!authCache.profileIndexAddress) {
+        // load profile index to load identities profile address from
+        const profileRegstryDomain = runtime.nameResolver
+          .getDomainName(runtime.nameResolver.config.domains.profile)
+        authCache.profileIndexAddress = await runtime.nameResolver.getAddress(profileRegstryDomain)
+      }
+
       const profileIndex = runtime.nameResolver.contractLoader
-        .loadContract('ProfileIndexInterface', profileIndexAddress)
+        .loadContract('ProfileIndexInterface', authCache.profileIndexAddress)
 
       // Check if a identity address has a underlying profile
-      const profileAddress = await runtime.nameResolver.executor.executeContractCall(
-        profileIndex,
-        'getProfile',
-        authComponents.EvanIdentity,
-        { from: authComponents.EvanIdentity },
-      )
+      const profileAddress = authCache.profile[authComponents.EvanIdentity]
+        || await runtime.nameResolver.executor.executeContractCall(
+          profileIndex,
+          'getProfile',
+          authComponents.EvanIdentity,
+          { from: authComponents.EvanIdentity },
+        )
 
       // if no profile could be found, its basically a old profile and we can reset the identity
       // address
       if (profileAddress === nullAddress) {
         authComponents.EvanIdentity = authComponents.EvanAuth
+      } else {
+        authCache.profile[authComponents.EvanIdentity] = profileAddress;
       }
     }
   }
