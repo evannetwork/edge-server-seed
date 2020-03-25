@@ -2,6 +2,7 @@
 
 ## Next Version
 ### Features
+- add `authMessage` identity address support
 
 ### Fixes
 

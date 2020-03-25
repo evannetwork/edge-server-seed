@@ -29,112 +29,154 @@ const { createDefaultRuntime, Ipfs, utils: { getSmartAgentAuthHeaders } } =
 const expect = chai.expect
 chai.use(dirtyChai)
 
-const ActionHero = require('actionhero')
-const actionhero = new ActionHero.Process()
-let api, testAccountRuntime
-
-const getAuthHeaders = async (runtime, timeOffset = 0) => {
-  return {
-    authorization: timeOffset
-      ? await getSmartAgentAuthHeaders(testAccountRuntime, `${Date.now() + timeOffset}`)
-      : await getSmartAgentAuthHeaders(testAccountRuntime)
-  }
-}
-const getAuthHeadersWithWrongKey = (runtime, timeOffset = 0) => {
-  const accountId = '0x1e7f9CE1aF9f1cB882997F730803dfb30B244b4F'
-  const privateKey = '0xf567916caecd6fe3ef1b2f531b5353999c3c3d659b30a99d5b2b170f474a52b8' // wrong
-  const message = `${Date.now() + timeOffset}`
-  const signature = runtime.web3.eth.accounts.sign(
-    message, privateKey).signature
-
-  return {
-    authorization: [
-      `EvanAuth ${accountId}`,
-      `EvanMessage ${message}`,
-      `EvanSignedMessage ${signature}`
-    ].join(',')
-  }
+const testAccounts = {
+  oldAccount: {
+    account: '0x1e7f9CE1aF9f1cB882997F730803dfb30B244b4F',
+    identity: '0x332A9AEf3ab283cB0c7270428cAb7A1e34c487db',
+    privateKey: '1a4109c1b38876217c0cafbed666c8d6d1522e34e89982e1c33d1e96119979e8',
+    password: 'Test1234',
+  },
+  newAccount: {
+    account: '0x0CdE1CfdD1cc7a1e16a52803e7e74B07F55793a3',
+    identity: '0x89C656Aa2dB8748D7DF4C60DB2D9603d4f14174C',
+    privateKey: 'dbcdefbffdfddcf81ef567fe313ea894986adc2fa98ce69c6b9a2867e58af245',
+    password: 'Test1234',
+  },
 }
 
-describe('Test signed requests', function () {
+process.env.NODE_ENV = 'test'
+
+describe('Test signed requests', async function () {
   this.timeout(15000)
 
-  before(async () => {
-    api = await actionhero.start()
+  /**
+   * Run the signed requests test with a specific configuration, to handle multiple cases. (account
+   * vs. identity based)
+   *
+   * @param      {string}  type           just text for the wrapping describe
+   * @param      {string}  accountConfig  account configuration that should be used (oldAccount /
+   *                                      newAccount)
+   */
+  const runTestsWithConfig = (type, accountConfig) => {
+    const ActionHero = require('actionhero')
+    const actionhero = new ActionHero.Process()
+    let api, testAccountRuntime
 
-    const runtimeConfig = {
-      // account map to blockchain accounts with their private key
-      accountMap: {
-        '0x1e7f9CE1aF9f1cB882997F730803dfb30B244b4F':
-          '1a4109c1b38876217c0cafbed666c8d6d1522e34e89982e1c33d1e96119979e8'
-      },
-      // key configuration for private data handling
-      keyConfig: {
-        '0x1e7f9CE1aF9f1cB882997F730803dfb30B244b4F': 'Test1234'
-      },
-      // ipfs configuration for evan.network storage
-      ipfs: { host: 'ipfs.test.evan.network', port: '443', protocol: 'https' },
-      // web3 provider config (currently evan.network testcore)
-      web3Provider: 'wss://testcore.evan.network/ws'
-    }
-    const provider = new Web3.providers.WebsocketProvider(
-      runtimeConfig.web3Provider,
-      { clientConfig: { keepalive: true, keepaliveInterval: 5000 } }
-    )
-    const web3 = new Web3(provider, null, { transactionConfirmationBlocks: 1 })
-    const dfs = new Ipfs({ remoteNode: new IpfsApi(runtimeConfig.ipfs) })
-
-    // create runtime
-    testAccountRuntime = await createDefaultRuntime(
-      web3,
-      dfs,
-      {
-        accountMap: runtimeConfig.accountMap,
-        keyConfig: runtimeConfig.keyConfig
+    const getAuthHeaders = async (runtime, timeOffset = 0, identity = undefined) => {
+      return {
+        authorization: timeOffset
+          ? await getSmartAgentAuthHeaders(testAccountRuntime, `${Date.now() + timeOffset}`, identity)
+          : await getSmartAgentAuthHeaders(testAccountRuntime, undefined, identity)
       }
-    )
-  })
-
-  after(async () => {
-    await actionhero.stop()
-  })
-
-  it('should have booted into the test env', () => {
-    expect(process.env.NODE_ENV).to.equal('test')
-    expect(api.env).to.equal('test')
-    expect(api.id).to.be.ok()
-  })
-
-  it('can retrieve successfull auth status', async () => {
-    const connection = await api.specHelper.Connection.createAsync()
-    connection.rawConnection.req = {
-      headers: await getAuthHeaders(testAccountRuntime)
     }
-    const { error, isAuthenticated } = await api.specHelper.runAction('authenticated', connection)
+    const getAuthHeadersWithWrongKey = (runtime, timeOffset = 0) => {
+      const privateKey = '0xf567916caecd6fe3ef1b2f531b5353999c3c3d659b30a99d5b2b170f474a52b8' // wrong
+      const message = `${Date.now() + timeOffset}`
+      const signature = runtime.web3.eth.accounts.sign(
+        message, privateKey).signature
 
-    expect(error).to.be.eq(undefined)
-    expect(isAuthenticated).to.be.eq(true)
-  })
-
-  it('can retrieves error when auth failed', async () => {
-    const connection = await api.specHelper.Connection.createAsync()
-    connection.rawConnection.req = {
-      headers: getAuthHeadersWithWrongKey(testAccountRuntime)
+      return {
+        authorization: [
+          `EvanAuth ${accountConfig.account}`,
+          `EvanMessage ${message}`,
+          `EvanSignedMessage ${signature}`
+        ].join(',')
+      }
     }
-    const { error, isAuthenticated } = await api.specHelper.runAction('authenticated', connection)
 
-    expect(error).to.be.not.empty()
-    expect(isAuthenticated).to.be.eq(undefined)
-  })
+    describe(type, function () {
+      before(async () => {
+        api = await actionhero.start()
 
-  it('can retrieves error when auth time is to long ago', async () => {
-    const connection = await api.specHelper.Connection.createAsync()
-    connection.rawConnection.req = {
-      headers: await getAuthHeaders(testAccountRuntime, (-6 * 60 * 1000)) // 6 minutes before
-    }
-    const { error, isAuthenticated } = await api.specHelper.runAction('authenticated', connection)
+        const runtimeConfig = {
+          // account map to blockchain accounts with their private key
+          accountMap: {
+            [accountConfig.account]: accountConfig.privateKey
+          },
+          // key configuration for private data handling
+          keyConfig: {
+            [accountConfig.account]: accountConfig.password,
+          },
+          // ipfs configuration for evan.network storage
+          ipfs: { host: 'ipfs.test.evan.network', port: '443', protocol: 'https' },
+          // web3 provider config (currently evan.network testcore)
+          web3Provider: 'wss://testcore.evan.network/ws'
+        }
+        const provider = new Web3.providers.WebsocketProvider(
+          runtimeConfig.web3Provider,
+          { clientConfig: { keepalive: true, keepaliveInterval: 5000 } }
+        )
+        const web3 = new Web3(provider, null, { transactionConfirmationBlocks: 1 })
+        const dfs = new Ipfs({ remoteNode: new IpfsApi(runtimeConfig.ipfs) })
 
-    expect(error).to.be.eq('Error: Signed message has been expired.')
-    expect(isAuthenticated).to.be.eq(undefined)
-  })
+        // create runtime
+        testAccountRuntime = await createDefaultRuntime(
+          web3,
+          dfs,
+          {
+            accountMap: runtimeConfig.accountMap,
+            keyConfig: runtimeConfig.keyConfig
+          }
+        )
+      })
+
+      after(async () => {
+        await actionhero.stop()
+      })
+
+      it('should have booted into the test env', () => {
+        expect(process.env.NODE_ENV).to.equal('test')
+        expect(api.env).to.equal('test')
+        expect(api.id).to.be.ok()
+      })
+
+      it('can retrieve successfull auth status', async () => {
+        const connection = await api.specHelper.Connection.createAsync()
+        connection.rawConnection.req = {
+          headers: await getAuthHeaders(testAccountRuntime)
+        }
+        const { error, isAuthenticated } = await api.specHelper.runAction('authenticated', connection)
+
+        expect(error).to.be.eq(undefined)
+        expect(isAuthenticated).to.be.eq(true)
+      })
+
+      it('can retrieves error when auth failed', async () => {
+        const connection = await api.specHelper.Connection.createAsync()
+        connection.rawConnection.req = {
+          headers: getAuthHeadersWithWrongKey(testAccountRuntime)
+        }
+        const { error, isAuthenticated } = await api.specHelper.runAction('authenticated', connection)
+
+        expect(error).to.be.not.empty()
+        expect(isAuthenticated).to.be.eq(undefined)
+      })
+
+      it('can retrieves error when auth time is to long ago', async () => {
+        const connection = await api.specHelper.Connection.createAsync()
+        connection.rawConnection.req = {
+          headers: await getAuthHeaders(testAccountRuntime, (-6 * 60 * 1000)) // 6 minutes before
+        }
+        const { error, isAuthenticated } = await api.specHelper.runAction('authenticated', connection)
+
+        expect(error).to.be.eq('Error: Signed message has been expired.')
+        expect(isAuthenticated).to.be.eq(undefined)
+      })
+
+      it('reject when accessing unpermitted identity', async () => {
+        const connection = await api.specHelper.Connection.createAsync()
+        connection.rawConnection.req = {
+          headers: await getAuthHeaders(testAccountRuntime, 0, '0x18aa46f4940817b132ade068f08d13df44e07220') // 6 minutes before
+        }
+        connection.rawConnection.req.he
+        const { error, isAuthenticated } = await api.specHelper.runAction('authenticated', connection)
+
+        expect(error).to.be.eq('Error: Account is not permitted for the provided identity.')
+        expect(isAuthenticated).to.be.eq(undefined)
+      })
+    })
+  }
+
+  runTestsWithConfig('Test signed requests with account based profile', testAccounts.oldAccount);
+  runTestsWithConfig('Test signed requests with identgity based profile', testAccounts.newAccount);
 })
