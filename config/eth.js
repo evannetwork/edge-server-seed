@@ -58,6 +58,7 @@ exports['default'] = {
           index: 'index',
           mailbox: 'mailbox',
           profile: 'profile',
+          vcs: 'vcs',
           wallet: 'wallet',
         },
         domains: {
@@ -72,6 +73,7 @@ exports['default'] = {
           profile: process.env.ENS_PROFILES || ['profile', 'ensRoot'],
           profileFactory: ['profile', 'factory', 'ensRoot'],
           root: ['ensRoot'],
+          vcRegistry: ['vcs', 'ensRoot'],
         },
       },
     }
