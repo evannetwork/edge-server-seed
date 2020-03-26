@@ -168,7 +168,6 @@ describe('Test signed requests', async function () {
         connection.rawConnection.req = {
           headers: await getAuthHeaders(testAccountRuntime, 0, '0x18aa46f4940817b132ade068f08d13df44e07220') // 6 minutes before
         }
-        connection.rawConnection.req.he
         const { error, isAuthenticated } = await api.specHelper.runAction('authenticated', connection)
 
         expect(error).to.be.eq('Error: Account is not permitted for the provided identity.')
