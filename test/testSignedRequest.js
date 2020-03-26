@@ -152,7 +152,7 @@ describe('Test signed requests', async function () {
         expect(isAuthenticated).to.be.eq(undefined)
       })
 
-      it('can retrieves error when auth time is to long ago', async () => {
+      it('should return an error when auth time is too long ago', async () => {
         const connection = await api.specHelper.Connection.createAsync()
         connection.rawConnection.req = {
           headers: await getAuthHeaders(testAccountRuntime, (-6 * 60 * 1000)) // 6 minutes before
