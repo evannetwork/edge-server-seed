@@ -163,7 +163,7 @@ describe('Test signed requests', async function () {
         expect(isAuthenticated).to.be.eq(undefined)
       })
 
-      it('reject when accessing unpermitted identity', async () => {
+      it('should reject when accessing unpermitted identity', async () => {
         const connection = await api.specHelper.Connection.createAsync()
         connection.rawConnection.req = {
           headers: await getAuthHeaders(testAccountRuntime, 0, '0x18aa46f4940817b132ade068f08d13df44e07220') // 6 minutes before
