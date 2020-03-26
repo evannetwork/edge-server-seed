@@ -178,5 +178,5 @@ describe('Test signed requests', async function () {
   }
 
   runTestsWithConfig('Test signed requests with account based profile', testAccounts.oldAccount);
-  runTestsWithConfig('Test signed requests with identgity based profile', testAccounts.newAccount);
+  runTestsWithConfig('Test signed requests with identity based profile', testAccounts.newAccount);
 })
