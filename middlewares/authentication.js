@@ -49,7 +49,7 @@ const _ensureAuth = async (connection) => {
   // if no identity was passed as auth header, check for old / new profile and try to load identity
   const runtime = api.smartAgentCore.runtime;
   if (!authComponents.EvanIdentity) {
-    const nullAddress = '0x0000000000000000000000000000000000000000';
+    const nullAddress = '0x0000000000000000000000000000000000000000'
     const identity = authCache.identity[authComponents.EvanAuth] || await runtime.verifications
       .getIdentityForAccount(authComponents.EvanAuth, true)
     authComponents.EvanIdentity = identity
