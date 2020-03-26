@@ -70,7 +70,7 @@ const _ensureAuth = async (connection) => {
       const profileIndex = runtime.nameResolver.contractLoader
         .loadContract('ProfileIndexInterface', authCache.profileIndexAddress)
 
-      // Check if a identity address has a underlying profile
+      // Check if an identity address has an underlying profile
       const profileAddress = authCache.profile[authComponents.EvanIdentity]
         || await runtime.nameResolver.executor.executeContractCall(
           profileIndex,
