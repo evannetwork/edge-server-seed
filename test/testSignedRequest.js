@@ -130,7 +130,7 @@ describe('Test signed requests', async function () {
         expect(api.id).to.be.ok()
       })
 
-      it('can retrieve successfull auth status', async () => {
+      it('should authenticate requests succesful', async () => {
         const connection = await api.specHelper.Connection.createAsync()
         connection.rawConnection.req = {
           headers: await getAuthHeaders(testAccountRuntime)
