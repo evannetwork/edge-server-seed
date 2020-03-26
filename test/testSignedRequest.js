@@ -141,7 +141,7 @@ describe('Test signed requests', async function () {
         expect(isAuthenticated).to.be.eq(true)
       })
 
-      it('can retrieves error when auth failed', async () => {
+      it('should return an error when auth failed', async () => {
         const connection = await api.specHelper.Connection.createAsync()
         connection.rawConnection.req = {
           headers: getAuthHeadersWithWrongKey(testAccountRuntime)
