@@ -16,7 +16,6 @@
 
 'use strict'
 const { Initializer, api } = require('actionhero')
-const { createDefaultRuntime } = require('@evan.network/api-blockchain-core')
 
 const SmartAgent = require('../lib/smart-agent')
 const { authMiddleware } = require('../middlewares/authentication')
@@ -36,13 +35,6 @@ module.exports = class SmartAgentCore extends Initializer {
       SmartAgent,
       registeredAgents: []
     }
-
-    // start the initialization code
-    const smartAgentCore = new SmartAgent(api.config.smartAgentCore)
-    await smartAgentCore.initialize()
-
-    // objects and values used outside initializer
-    api.smartAgentCore = smartAgentCore
 
     // add authentication middleware to agent
     api.actions.addMiddleware(authMiddleware)

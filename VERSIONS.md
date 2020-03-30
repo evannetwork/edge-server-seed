@@ -2,7 +2,8 @@
 
 ## Next Version
 ### Features
-- add `authMessage` identity address support
+- add `ensureIdentityAuth` to `middlwares/authentication`
+- add `registerAuthMiddleware` to `SmartAgent` class for enabling identity authentication with custom auth middlewares
 - remove requester information on default
 
 ### Fixes

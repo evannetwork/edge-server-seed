@@ -118,6 +118,18 @@ describe('Test signed requests', async function () {
             keyConfig: runtimeConfig.keyConfig
           }
         )
+
+        // register custom smart agent for testing identity middleware
+        // believe cupboard trip message rebel guess moral churn clean cram journey ready
+        api.config.smartAgentCore.ethAccount = '0x66D487419Ac030993Dba3D893Fc99bdafDCf60bB'
+        api.config.ethAccounts = Object.assign(api.config.ethAccounts || { }, {
+          '0x66D487419Ac030993Dba3D893Fc99bdafDCf60bB': 'cf316cf854f6d4ae7bd7c28ad124ae6ff95e3f4f7439e67a85689c0b8f632c13'
+        })
+        // create custom smart agent and register identity auth middleware for correct test behavior
+        api.testSmartAgent = new api.smartAgents.SmartAgent(api.config.smartAgentCore)
+        await api.testSmartAgent.initialize()
+        api.testSmartAgent.registerAuthMiddleware('test', api.testSmartAgent.runtime)
+        api.actions.actions.authenticated['1'].middleware = ['ensureTestAuth']
       })
 
       after(async () => {
@@ -177,6 +189,6 @@ describe('Test signed requests', async function () {
     })
   }
 
-  runTestsWithConfig('Test signed requests with account based profile', testAccounts.oldAccount);
-  runTestsWithConfig('Test signed requests with identgity based profile', testAccounts.newAccount);
+  runTestsWithConfig('Test signed requests with account based profile', testAccounts.oldAccount)
+  runTestsWithConfig('Test signed requests with identgity based profile', testAccounts.newAccount)
 })
