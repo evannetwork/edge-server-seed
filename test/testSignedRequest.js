@@ -142,7 +142,7 @@ describe('Test signed requests', async function () {
         expect(api.id).to.be.ok()
       })
 
-      it('can retrieve successfull auth status', async () => {
+      it('should authenticate requests succesful', async () => {
         const connection = await api.specHelper.Connection.createAsync()
         connection.rawConnection.req = {
           headers: await getAuthHeaders(testAccountRuntime)
@@ -153,7 +153,7 @@ describe('Test signed requests', async function () {
         expect(isAuthenticated).to.be.eq(true)
       })
 
-      it('can retrieves error when auth failed', async () => {
+      it('should return an error when auth failed', async () => {
         const connection = await api.specHelper.Connection.createAsync()
         connection.rawConnection.req = {
           headers: getAuthHeadersWithWrongKey(testAccountRuntime)
@@ -164,7 +164,7 @@ describe('Test signed requests', async function () {
         expect(isAuthenticated).to.be.eq(undefined)
       })
 
-      it('can retrieves error when auth time is to long ago', async () => {
+      it('should return an error when auth time is too long ago', async () => {
         const connection = await api.specHelper.Connection.createAsync()
         connection.rawConnection.req = {
           headers: await getAuthHeaders(testAccountRuntime, (-6 * 60 * 1000)) // 6 minutes before
@@ -175,12 +175,11 @@ describe('Test signed requests', async function () {
         expect(isAuthenticated).to.be.eq(undefined)
       })
 
-      it('reject when accessing unpermitted identity', async () => {
+      it('should reject when accessing unpermitted identity', async () => {
         const connection = await api.specHelper.Connection.createAsync()
         connection.rawConnection.req = {
           headers: await getAuthHeaders(testAccountRuntime, 0, '0x18aa46f4940817b132ade068f08d13df44e07220') // 6 minutes before
         }
-        connection.rawConnection.req.he
         const { error, isAuthenticated } = await api.specHelper.runAction('authenticated', connection)
 
         expect(error).to.be.eq('Error: Account is not permitted for the provided identity.')
@@ -190,5 +189,5 @@ describe('Test signed requests', async function () {
   }
 
   runTestsWithConfig('Test signed requests with account based profile', testAccounts.oldAccount)
-  runTestsWithConfig('Test signed requests with identgity based profile', testAccounts.newAccount)
+  runTestsWithConfig('Test signed requests with identity based profile', testAccounts.newAccount)
 })
