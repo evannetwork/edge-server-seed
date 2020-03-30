@@ -85,7 +85,7 @@ const ensureIdentityAuth = async (runtime, authComponents) => {
  *
  * @param      {any}  connection  actionhero connection instance
  */
-const ensureAuth = async (connection) => {
+const ensureAuth = (connection) => {
   if (!connection.rawConnection.req.headers.authorization) {
     throw new Error('no authorization headers provided')
   }
@@ -125,9 +125,7 @@ const authMiddleware = {
   name: 'ensureEvanAuth',
   global: false,
   priority: 10,
-  preProcessor: async ({ connection }) => {
-    await ensureAuth(connection)
-  }
+  preProcessor: ensureAuth,
 }
 
 module.exports = {
