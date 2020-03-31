@@ -108,7 +108,7 @@ The latest updates of the `@evan.network/api-blockchain-core` also provides the 
 ```js
 api.testSmartAgent = new api.smartAgents.SmartAgent({ ... })
 await api.testSmartAgent.initialize()
-api.testSmartAgent.registerAuthMiddleware('test', api.testSmartAgent.runtime)
+api.testSmartAgent.registerAuthMiddleware('ensureTestAuth', api.testSmartAgent.runtime)
 ```
 
 - action

@@ -128,7 +128,7 @@ describe('Test signed requests', async function () {
         // create custom smart agent and register identity auth middleware for correct test behavior
         api.testSmartAgent = new api.smartAgents.SmartAgent(api.config.smartAgentCore)
         await api.testSmartAgent.initialize()
-        api.testSmartAgent.registerAuthMiddleware('test', api.testSmartAgent.runtime)
+        api.testSmartAgent.registerAuthMiddleware('ensureTestAuth', api.testSmartAgent.runtime)
         api.actions.actions.authenticated['1'].middleware = ['ensureTestAuth']
       })
 
