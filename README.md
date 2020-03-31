@@ -39,7 +39,7 @@ The hash to index for encryptionKeys is constructed by the blockchain core in di
 different puposes, But usually it is just a SHA3 hash of an accountID or of a descriptive string.
 
 ## Register SmartAgent
-For registering a SmartAgent, create a initializer and add something like the following:
+For registering a SmartAgent, create an initializer and add something like in the example below. This creates a new instance of your SmartAgent and makes it available for other actionhero components at the `api` (in this case at `api.smartAgentTest`. As this SmartAgent extends `api.smartAgents.SmartAgent`, it will have a property called `runtime`, that can be used for interaction with evan.network (see [API documentation](https://api-blockchain-core.readthedocs.io/en/latest/index.html) for details).
 
 ```js
 const { api, Initializer } = require('actionhero')
