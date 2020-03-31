@@ -1,5 +1,5 @@
 exports['default'] = {
-  smartAgentCore: (api) => {
+  smartAgentCore: () => {
     return {
       payments: {
         accountIdChannelManager: '0x0A0D9dddEba35Ca0D235A4086086AC704bbc8C2b',
@@ -18,8 +18,9 @@ exports['default'] = {
 
 
 exports['core'] = {
-  smartAgentCore: (api) => {
+  smartAgentCore: () => {
     return {
+      ethAccount: '0x992b98e59CFcC47d982F0eB8Bbb2B00D85EDCce2',
       payments: {
         accountIdChannelManager: '0x543571BCad760CF43031403359762b049B771Bb5',
         accountIdPaymentAgent: '0xD21EE2c93655581Ec1C0679c9A028247e9CC9eBB',

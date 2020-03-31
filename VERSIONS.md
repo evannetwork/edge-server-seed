@@ -2,6 +2,8 @@
 
 ## Next Version
 ### Features
+- add `ensureIdentityAuth` to `middlwares/authentication` to support authentication via identities by checking the `EvanIdentity` authentication header
+- add `registerAuthMiddleware` to `SmartAgent` class for enabling identity authentication with custom auth middlewares
 - remove requester information on default
 
 ### Fixes
