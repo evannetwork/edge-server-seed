@@ -102,7 +102,7 @@ class Authenticated extends Action {
 module.exports = Authenticated
 ```
 
-The latest updates of the `@evan.network/api-blockchain-core` also provides the possibility to check if the passed `EvanAuth` address is allowed to interact on behalf of the passed `EvanIdentity`. To enable this check, you need to register your own authentication middleware from your smart agent instance and pass a valid `@evan.network/api-blockchain-core` runtime.
+The latest updates of the `@evan.network/api-blockchain-core` also provide the possibility to check if the passed `EvanAuth` address is allowed to interact on behalf of the passed `EvanIdentity`. To enable this check, you need to register your own authentication middleware from your smart agent instance and pass a valid `@evan.network/api-blockchain-core` runtime.
 
 - initializer
 ```js
