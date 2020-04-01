@@ -125,7 +125,7 @@ const authMiddleware = {
   name: 'ensureEvanAuth',
   global: false,
   priority: 10,
-  preProcessor: ensureAuth,
+  preProcessor: async ({ connection }) => ensureAuth(connection),
 }
 
 module.exports = {
