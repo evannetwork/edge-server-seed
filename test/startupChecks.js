@@ -19,7 +19,7 @@
 'use strict'
 
 const chai = require('chai')
-const chaiAsPromised = require('chai-as-promised');
+const chaiAsPromised = require('chai-as-promised')
 
 
 const expect = chai.expect
@@ -47,7 +47,7 @@ describe('Actionhero status Tests', function () {
       }
     }
 
-    const test = new TestClass({});
+    const test = new TestClass({})
     await expect(test.initialize()).to.be.rejectedWith('No account has been configured') 
   })
 

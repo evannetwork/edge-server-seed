@@ -1,8 +1,8 @@
 {
   "author": "evan GmbH",
   "dependencies": {
-    "@evan.network/api-blockchain-core": "^2.17.0",
-    "@evan.network/smart-contracts-core": "^2.9.0",
+    "@evan.network/api-blockchain-core": "^2.18.0",
+    "@evan.network/smart-contracts-core": "^2.10.0",
     "actionhero": "^19.1.0",
     "chai-as-promised": "^7.1.1",
     "env-cmd": "^7.0.0",
@@ -48,5 +48,5 @@
       "public/javascript/ActionheroWebsocketClient.*"
     ]
   },
-  "version": "1.8.0"
+  "version": "1.9.0"
 }
