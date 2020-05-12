@@ -4,6 +4,7 @@
 ### Features
 
 ### Fixes
+- add missing payments domain in config
 
 ### Deprecations
 
